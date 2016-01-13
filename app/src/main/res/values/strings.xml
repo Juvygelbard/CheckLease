@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CheckLease</string>
+    <string name="db_name">CheckLeaseDB</string>
+    <string name="AddApartmentTitle">דירה חדשה</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    >
+
+    //The Image shows if it is a Favorite apartment.
+    <ImageView
+        android:id="@+id/image_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/star_empty_grey"
+        />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+            android:id="@+id/address_and_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            >
+            //the address
+            <TextView
+                android:id="@+id/address"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="25dp"
+                android:layout_gravity="right"
+                android:text="יוסף בן מתתיהו 72/5"/>
+            //sub title
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:textSize="15dp"
+                android:layout_gravity="right"
+                android:text="subtitle"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    //The Image according the rate of the apartment.
+
+    <ImageView
+        android:id="@+id/image_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:src="@drawable/home_grey"
+        />
+
+</LinearLayout>
