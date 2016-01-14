@@ -11,12 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import adapters.CustomAdapter;
 import bgu_apps.checklease.AddApartment;
-import bgu_apps.checklease.MainActivity;
 import bgu_apps.checklease.R;
 import data.Apartment;
 import data.Data;
@@ -43,28 +43,35 @@ public class ApartmentListFragment extends Fragment {
         _apartments = _apartmentDB.getApartmentList();
         _adapter = new CustomAdapter(_apartments, inflater);
         _lv.setAdapter(_adapter);
+        FloatingActionButton fab = (FloatingActionButton)layout.findViewById(R.id.add_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), AddApartment.class);
+                ApartmentListFragment.this.startActivity(addApartment);
+            }
+        });
         return layout;
-    }
-
-    public void openAddApartment(View view){
-        Intent addApartment = new Intent(this.getActivity(), AddApartment.class);
-        this.startActivity(addApartment);
     }
 
     public void dummy(){
         Apartment ap1 = new Apartment();
+        ap1.add(Data.FAVORITE, 0);
         ap1.add(Data.STREET, "יוסף בן מתתיהו");
         ap1.add(Data.BUILDING, 72);
         ap1.add(Data.NUM_APARTMENT, 4);
         Apartment ap2 = new Apartment();
+        ap2.add(Data.FAVORITE, 0);
         ap2.add(Data.STREET, "קדש");
         ap2.add(Data.BUILDING, 72);
         ap2.add(Data.NUM_APARTMENT, 4);
         Apartment ap3 = new Apartment();
+        ap3.add(Data.FAVORITE, 0);
         ap3.add(Data.STREET,"סימטת הבשור");
         ap3.add(Data.BUILDING, 72);
         ap3.add(Data.NUM_APARTMENT, 4);
         Apartment ap4 = new Apartment();
+        ap4.add(Data.FAVORITE, 0);
         ap4.add(Data.STREET,"וינגייט" );
         ap4.add(Data.BUILDING, 72);
         ap4.add(Data.NUM_APARTMENT, 4);

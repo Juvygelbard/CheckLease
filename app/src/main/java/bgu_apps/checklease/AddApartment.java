@@ -16,7 +16,9 @@ public class AddApartment extends AppCompatActivity {
 
         _fields = Data.getAllFields();
         for(Field field: _fields){
-            
+            switch (field.getType()){
+
+            }
         }
 
         setContentView(R.layout.activity_add_apartment);

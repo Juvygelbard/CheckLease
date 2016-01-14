@@ -10,10 +10,11 @@ public class Data {
     private static String _city = "BG";
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
-    public static final int STREET = 0;
-    public static final int BUILDING = 1;
-    public static final int NUM_APARTMENT = 2;
-    public static final int PHONE = 3;
+    public static final int FAVORITE = 0;
+    public static final int STREET = 1;
+    public static final int BUILDING = 2;
+    public static final int NUM_APARTMENT = 3;
+    public static final int PHONE = 4;
 
     private Data(){}
 

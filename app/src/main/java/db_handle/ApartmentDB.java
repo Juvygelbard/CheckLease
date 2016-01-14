@@ -79,6 +79,15 @@ public class ApartmentDB {
         return apartmentList;
     }
 
+    public ArrayList<Apartment> getFavoriteList(){
+        ArrayList<Apartment> raw = this.getApartmentList();
+        ArrayList<Apartment> filtered = new ArrayList<Apartment>();
+        for(Apartment curr: raw)
+            if(curr.getValue(Data.FAVORITE).getIntValue() == 1)
+                filtered.add(curr);
+        return filtered;
+    }
+
     public void addApartment(Apartment toAdd){
         SQLiteDatabase db = _db.getWritableDatabase();
         // get features iterator
@@ -99,5 +108,12 @@ public class ApartmentDB {
             db.insert("apartments", null, feature);
         }
         Data.increaseApartmentCounter();
+    }
+
+    public void setFavorite(int apartmentID ,boolean state){
+        SQLiteDatabase db = _db.getWritableDatabase();
+        ContentValues updatedRow = new ContentValues();
+        updatedRow.put("int_val", state);
+        db.update("rest",updatedRow, "apartment_id=" + apartmentID + ", field_id=" + Data.FAVORITE, null);
     }
 }

@@ -6,6 +6,10 @@ import Formula.Formula;
  * Created by user on 30/12/2015.
  */
 public class Field {
+    public static int CHECKBOX = 0;
+    public static int MULTISELECT = 1;
+    public static int NUMBER = 2;
+    public static int TEXT = 3;
 
     private int _id;
     private String _name;
