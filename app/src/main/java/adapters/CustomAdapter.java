@@ -57,7 +57,7 @@ public class CustomAdapter extends BaseAdapter {
         final Apartment curr = _allApartments.get(position);
 
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
-        subTitle.setText("Sub title"); // todo: complete!
+        subTitle.setText("" + curr.getId()); // todo: complete!
         rateImg.setImageResource(R.drawable.home_grey); // todo: complete!
         if(curr.isFavorite())
             favoriteImg.setImageResource(R.drawable.star_full_orange);
@@ -69,12 +69,11 @@ public class CustomAdapter extends BaseAdapter {
                 ApartmentDB apartmentDB = ApartmentDB.getInstance();
                 if(curr.isFavorite()) {
                     favoriteImg.setImageResource(R.drawable.star_empty_grey);
-                    curr.setFavorite(false);
-
+                    apartmentDB.setFavorite(curr.getId(), false);
                 }
                 else {
                     favoriteImg.setImageResource(R.drawable.star_full_orange);
-                    curr.setFavorite(true);
+                    apartmentDB.setFavorite(curr.getId(), true);
                 }
             }
         });

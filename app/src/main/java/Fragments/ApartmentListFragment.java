@@ -56,25 +56,25 @@ public class ApartmentListFragment extends Fragment {
 
     public void dummy(){
         Apartment ap1 = new Apartment(0);
-        ap1.add(Data.FAVORITE, 0);
-        ap1.add(Data.STREET, "יוסף בן מתתיהו");
-        ap1.add(Data.BUILDING, 72);
-        ap1.add(Data.NUM_APARTMENT, 4);
+        ap1.addValue(Data.FAVORITE, 0);
+        ap1.addValue(Data.STREET, "יוסף בן מתתיהו");
+        ap1.addValue(Data.BUILDING, 72);
+        ap1.addValue(Data.NUM_APARTMENT, 4);
         Apartment ap2 = new Apartment(1);
-        ap2.add(Data.FAVORITE, 0);
-        ap2.add(Data.STREET, "קדש");
-        ap2.add(Data.BUILDING, 72);
-        ap2.add(Data.NUM_APARTMENT, 4);
+        ap2.addValue(Data.FAVORITE, 0);
+        ap2.addValue(Data.STREET, "קדש");
+        ap2.addValue(Data.BUILDING, 72);
+        ap2.addValue(Data.NUM_APARTMENT, 4);
         Apartment ap3 = new Apartment(2);
-        ap3.add(Data.FAVORITE, 0);
-        ap3.add(Data.STREET,"סימטת הבשור");
-        ap3.add(Data.BUILDING, 72);
-        ap3.add(Data.NUM_APARTMENT, 4);
+        ap3.addValue(Data.FAVORITE, 0);
+        ap3.addValue(Data.STREET, "סימטת הבשור");
+        ap3.addValue(Data.BUILDING, 72);
+        ap3.addValue(Data.NUM_APARTMENT, 4);
         Apartment ap4 = new Apartment(3);
-        ap4.add(Data.FAVORITE, 0);
-        ap4.add(Data.STREET,"וינגייט" );
-        ap4.add(Data.BUILDING, 72);
-        ap4.add(Data.NUM_APARTMENT, 4);
+        ap4.addValue(Data.FAVORITE, 0);
+        ap4.addValue(Data.STREET, "וינגייט");
+        ap4.addValue(Data.BUILDING, 72);
+        ap4.addValue(Data.NUM_APARTMENT, 4);
 
         _apartmentDB.addApartment(ap1);
         _apartmentDB.addApartment(ap2);

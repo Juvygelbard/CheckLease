@@ -92,7 +92,7 @@ public class ApartmentDB {
         SQLiteDatabase db = _db.getWritableDatabase();
         // get features iterator
         Iterator<Map.Entry<Integer, Value>> apartmentFeature = toAdd.getFeatureIterator();
-        while(apartmentFeature.hasNext()){ // iterate through features and add them ti db
+        while(apartmentFeature.hasNext()){ // iterate through features and add them to db
             Map.Entry<Integer, Value> currEntry = apartmentFeature.next();
             Value val = currEntry.getValue();
             int fieldID = currEntry.getKey().intValue();
@@ -113,7 +113,10 @@ public class ApartmentDB {
     public void setFavorite(int apartmentID ,boolean state){
         SQLiteDatabase db = _db.getWritableDatabase();
         ContentValues updatedRow = new ContentValues();
-        updatedRow.put("int_val", state);
-        db.update("rest",updatedRow, "apartment_id=" + apartmentID + ", field_id=" + Data.FAVORITE, null);
+        if(state)
+            updatedRow.put("int_val", 1);
+        else
+            updatedRow.put("int_val", 0);
+        db.update("apartments", updatedRow, "apartment_id=" + apartmentID + " AND field_id=" + Data.FAVORITE, null);
     }
 }

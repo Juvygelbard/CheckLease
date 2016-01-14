@@ -11,11 +11,9 @@ import data.Value;
  */
 public class Apartment {
     private HashMap<Integer, Value> _apartmentDetails;
-    private boolean _isFavorite;
     private int _id;
 
     public Apartment(int id){
-        _isFavorite = false;
         _apartmentDetails = new HashMap<Integer , Value>();
         _id = id;
     }
@@ -46,10 +44,6 @@ public class Apartment {
         _apartmentDetails.put(id, value);
     }
 
-    public void setFavorite(boolean isFavorite){
-        _isFavorite = isFavorite;
-    }
-
     public String getAddress(){
         String street = this.getValue(Data.STREET).getStrValue();
         int building = this.getValue(Data.BUILDING).getIntValue();
@@ -61,6 +55,6 @@ public class Apartment {
     }
 
     public boolean isFavorite(){
-        return _isFavorite;
+        return _apartmentDetails.get(Data.FAVORITE).getIntValue() == 1;
     }
 }
