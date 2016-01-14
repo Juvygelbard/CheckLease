@@ -14,16 +14,16 @@ import data.Field;
  * Created by Juvy on 30/12/2015.
  */
 public class FieldDB {
-    private static FieldDBHelper _db;
+    private static DBHelper _db;
     private static FieldDB _instance;
 
     /**
      * creates a FieldDBHelper object to connect with the db.
      * should be called only once!
-     * @param context
+     * @param db
      */
-    public static void init(Context context){
-        _db = new FieldDBHelper(context);
+    public static void init(DBHelper db){
+        _db = db;
     }
 
     private FieldDB(){ }

@@ -16,6 +16,7 @@ import adapters.ViewPagerAdapter;
 import data.Data;
 import db_handle.ApartmentDB;
 import db_handle.FieldDB;
+import db_handle.DBHelper;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
         setupTabIcons();
 
         // initiating db:
-        FieldDB.init(this.getApplicationContext());
-        ApartmentDB.init(this.getApplicationContext());
+        DBHelper db = new DBHelper(this.getApplicationContext());
+        ApartmentDB.init(db);
+        FieldDB.init(db);
 
         FieldDB fieldDB = FieldDB.getInstance();
         fieldDB.dummy(); // TODO: REMOVE!

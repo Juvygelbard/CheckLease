@@ -18,16 +18,16 @@ import data.Value;
  * Created by Juvy on 30/12/2015.
  */
 public class ApartmentDB {
-    private static ApartmentDBHelper _db;
+    private static DBHelper _db;
     private static ApartmentDB _instance;
 
     /**
      * creates a FieldDBHelper object to connect with the db.
      * should be called only once!
-     * @param context
+     * @param db
      */
-    public static void init(Context context){
-        _db = new ApartmentDBHelper(context);
+    public static void init(DBHelper db){
+        _db = db;
     }
 
     private ApartmentDB(){ }
