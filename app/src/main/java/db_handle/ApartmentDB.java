@@ -100,13 +100,4 @@ public class ApartmentDB {
         }
         Data.increaseApartmentCounter();
     }
-
-    // TODO: REWRITE, TEST and then DELETE THIS!
-    public void dummy(){
-        SQLiteDatabase db = _db.getWritableDatabase();
-        ContentValues val1app1 = new ContentValues();
-        val1app1.put("val", 3);
-
-        db.insert("apartments", null, val1app1);
-    }
 }

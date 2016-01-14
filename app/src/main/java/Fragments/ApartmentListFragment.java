@@ -40,7 +40,8 @@ public class ApartmentListFragment extends Fragment {
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
         _apartmentDB = ApartmentDB.getInstance();
         dummy();
-        _apartments = _apartmentDB.getApartmentList();
+        // _apartments = _apartmentDB.getApartmentList();
+        _apartments = new ArrayList<Apartment>();
         _adapter = new CustomAdapter(_apartments, inflater);
         _lv.setAdapter(_adapter);
         return layout;
