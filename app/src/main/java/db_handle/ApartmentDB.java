@@ -61,14 +61,14 @@ public class ApartmentDB {
 
                 // add a new apartment if it dosn't exist.
                 if(!apartments.containsKey(apartment_id))
-                    apartments.put(apartment_id, new Apartment());
+                    apartments.put(apartment_id, new Apartment(apartment_id));
 
                 // add value to existing apartment
                 Apartment currApp = apartments.get(apartment_id);
                 if(strVal.equals("NULL"))
-                    currApp.add(field_id, intVal);
+                    currApp.addValue(field_id, intVal);
                 else
-                    currApp.add(field_id, strVal);
+                    currApp.addValue(field_id, strVal);
 
                 curr.moveToNext();
             }

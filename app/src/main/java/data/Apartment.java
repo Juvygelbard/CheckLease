@@ -12,10 +12,12 @@ import data.Value;
 public class Apartment {
     private HashMap<Integer, Value> _apartmentDetails;
     private boolean _isFavorite;
+    private int _id;
 
-    public Apartment(){
+    public Apartment(int id){
         _isFavorite = false;
         _apartmentDetails = new HashMap<Integer , Value>();
+        _id = id;
     }
 
     public Value getValue(int i){
@@ -25,17 +27,21 @@ public class Apartment {
             throw new NullPointerException("Value " + i + " does not exist for this apartment");
     }
 
+    public int getId(){
+        return this._id;
+    }
+
     public Iterator<HashMap.Entry<Integer, Value>> getFeatureIterator(){
         Iterator<HashMap.Entry<Integer, Value>> iterator = _apartmentDetails.entrySet().iterator();
         return iterator;
     }
 
-    public void add(int id, int num){
+    public void addValue(int id, int num){
         Value value = new Value(num);
         _apartmentDetails.put(id ,value);
     }
 
-    public void add(int id, String string){
+    public void addValue(int id, String string){
         Value value = new Value(string);
         _apartmentDetails.put(id, value);
     }

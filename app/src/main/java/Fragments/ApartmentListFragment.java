@@ -55,22 +55,22 @@ public class ApartmentListFragment extends Fragment {
     }
 
     public void dummy(){
-        Apartment ap1 = new Apartment();
+        Apartment ap1 = new Apartment(0);
         ap1.add(Data.FAVORITE, 0);
         ap1.add(Data.STREET, "יוסף בן מתתיהו");
         ap1.add(Data.BUILDING, 72);
         ap1.add(Data.NUM_APARTMENT, 4);
-        Apartment ap2 = new Apartment();
+        Apartment ap2 = new Apartment(1);
         ap2.add(Data.FAVORITE, 0);
         ap2.add(Data.STREET, "קדש");
         ap2.add(Data.BUILDING, 72);
         ap2.add(Data.NUM_APARTMENT, 4);
-        Apartment ap3 = new Apartment();
+        Apartment ap3 = new Apartment(2);
         ap3.add(Data.FAVORITE, 0);
         ap3.add(Data.STREET,"סימטת הבשור");
         ap3.add(Data.BUILDING, 72);
         ap3.add(Data.NUM_APARTMENT, 4);
-        Apartment ap4 = new Apartment();
+        Apartment ap4 = new Apartment(3);
         ap4.add(Data.FAVORITE, 0);
         ap4.add(Data.STREET,"וינגייט" );
         ap4.add(Data.BUILDING, 72);
