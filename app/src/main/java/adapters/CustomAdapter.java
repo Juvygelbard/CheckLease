@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 import data.Apartment;
 import bgu_apps.checklease.R;
+import db_handle.ApartmentDB;
 
 /**
  * Created by user on 30/12/2015.
@@ -50,9 +52,9 @@ public class CustomAdapter extends BaseAdapter {
         TextView address = (TextView) row.findViewById(R.id.address);
         TextView subTitle = (TextView) row.findViewById(R.id.subtitle);
         ImageView rateImg = (ImageView) row.findViewById(R.id.image_rate);
-        ImageView favoriteImg = (ImageView) row.findViewById(R.id.image_favorite);
+        final ImageButton favoriteImg = (ImageButton) row.findViewById(R.id.button_favorite);
 
-        Apartment curr = _allApartments.get(position);
+        final Apartment curr = _allApartments.get(position);
 
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
         subTitle.setText("Sub title"); // todo: complete!
@@ -61,7 +63,21 @@ public class CustomAdapter extends BaseAdapter {
             favoriteImg.setImageResource(R.drawable.star_full_orange);
         else
             favoriteImg.setImageResource(R.drawable.star_empty_grey);
+        favoriteImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApartmentDB apartmentDB = ApartmentDB.getInstance();
+                if(curr.isFavorite()) {
+                    favoriteImg.setImageResource(R.drawable.star_empty_grey);
+                    curr.setFavorite(false);
 
+                }
+                else {
+                    favoriteImg.setImageResource(R.drawable.star_full_orange);
+                    curr.setFavorite(true);
+                }
+            }
+        });
 
         return row;
     }

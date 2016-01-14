@@ -7,13 +7,14 @@
     >
 
     //The Image shows if it is a Favorite apartment.
-    <ImageView
-        android:id="@+id/image_favorite"
+    <ImageButton
+        android:id="@+id/button_favorite"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/star_empty_grey"
-        />
+        android:background="@null"
+        style="@style/Base.Widget.AppCompat.ImageButton" />
 
     <RelativeLayout
         android:layout_width="0dp"
