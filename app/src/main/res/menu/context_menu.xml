@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/showApartment"
+        android:title="הצג"/>
+
+    <item android:id="@+id/editApartment"
+        android:title="ערוך"/>
+
+    <item android:id="@+id/sendApartment"
+        android:title="שלח"/>
+
+    <item android:id="@+id/deleteApartment"
+        android:title="מחק"/>
+
+</menu>

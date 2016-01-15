@@ -7,11 +7,23 @@ package Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+
+
 
 import java.util.ArrayList;
 
@@ -21,6 +33,8 @@ import bgu_apps.checklease.R;
 import data.Apartment;
 import data.Data;
 import db_handle.ApartmentDB;
+import android.view.MenuItem;
+
 
 public class ApartmentListFragment extends Fragment {
 
@@ -38,7 +52,24 @@ public class ApartmentListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View layout = inflater.inflate(R.layout.fragment_apartment_list, container, false);
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
-        _apartmentDB = ApartmentDB.getInstance();
+        registerForContextMenu(_lv);
+
+
+        //todo: LongClick.
+        _lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        _lv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
+
+
+
+
+
+            _apartmentDB = ApartmentDB.getInstance();
         dummy();
         _apartments = _apartmentDB.getApartmentList();
         _adapter = new CustomAdapter(_apartments, inflater);
@@ -52,6 +83,32 @@ public class ApartmentListFragment extends Fragment {
             }
         });
         return layout;
+    }
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = this.getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.showApartment:
+               // editApartment(info.id);
+                return true;
+            case R.id.editApartment:
+              //  editApartment(info.id);
+                return true;
+            case R.id.sendApartment:
+            //    sendApartment(info.id);
+                return true;
+            case R.id.deleteApartment:
+              //  deleteApartment(info.id);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     public void dummy(){

@@ -56,6 +56,7 @@ public class CustomAdapter extends BaseAdapter {
 
         final Apartment curr = _allApartments.get(position);
 
+
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
         subTitle.setText("" + curr.getId()); // todo: complete!
         rateImg.setImageResource(R.drawable.home_grey); // todo: complete!
@@ -77,6 +78,7 @@ public class CustomAdapter extends BaseAdapter {
                 }
             }
         });
+
 
         return row;
     }
