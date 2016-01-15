@@ -53,7 +53,7 @@ public class FieldDB {
             while(!curr.isAfterLast()){
                 int id = curr.getInt(colID);
                 String name = curr.getString(colName);
-                int type = curr.getType(colType);
+                int type = curr.getInt(colType);
                 String formula = curr.getString(colFormula);
                 int extra1 = curr.getInt(colExtra1);
                 String extra2 = curr.getString(colExtra2);
@@ -73,7 +73,7 @@ public class FieldDB {
         neighborhood.put("order_i", 1);
         neighborhood.put("city", "BG");
         neighborhood.put("name", "שכונה");
-        neighborhood.put("type", 3);
+        neighborhood.put("type", Field.MULTISELECT);
         neighborhood.put("formula", "X+100Y");
         neighborhood.put("extra1", "א';ב';ג';ד';ו'");
         neighborhood.put("extra2", 4);
@@ -84,7 +84,7 @@ public class FieldDB {
         appartmentSize.put("order_i", 2);
         appartmentSize.put("city", "BG");
         appartmentSize.put("name", "גודל דירה");
-        appartmentSize.put("type", 1);
+        appartmentSize.put("type", Field.NUMBER);
         appartmentSize.put("formula", "(1+Y/100)*X");
         appartmentSize.put("extra1", "");
         appartmentSize.put("extra2", 100);
@@ -95,7 +95,7 @@ public class FieldDB {
         washingMachine.put("order_i", 1);
         washingMachine.put("city", "BG");
         washingMachine.put("name", "מכונת כביסה");
-        washingMachine.put("type", 2);
+        washingMachine.put("type", Field.CHECKBOX);
         washingMachine.put("formula", "X+200Y");
         washingMachine.put("extra1", "");
         washingMachine.put("extra2", 0);

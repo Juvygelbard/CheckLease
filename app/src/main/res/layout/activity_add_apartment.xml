@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:padding="@dimen/padding"
-    android:orientation="vertical"
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/AddApartmentTitle"
-        android:textSize="@dimen/title_size"
-        android:layout_gravity="right"
-        android:id="@+id/textView" />
-</LinearLayout>
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:padding="@dimen/padding"
+            android:orientation="vertical"
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/AddApartmentTitle"
+                android:textSize="@dimen/title_size"
+                android:layout_gravity="right"
+                android:id="@+id/textView" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
