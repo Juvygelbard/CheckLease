@@ -54,6 +54,13 @@ public class Apartment {
             return street + " " + building + "/" + numAppartment;
     }
 
+    public void setFavorite(boolean fav){
+        if(fav)
+            _apartmentDetails.put(Data.FAVORITE, new Value(1));
+        else
+            _apartmentDetails.put(Data.FAVORITE, new Value(0));
+    }
+
     public boolean isFavorite(){
         return _apartmentDetails.get(Data.FAVORITE).getIntValue() == 1;
     }

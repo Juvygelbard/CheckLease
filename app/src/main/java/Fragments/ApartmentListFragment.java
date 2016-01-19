@@ -13,9 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
@@ -34,6 +31,7 @@ import data.Apartment;
 import data.Data;
 import db_handle.ApartmentDB;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class ApartmentListFragment extends Fragment {
@@ -42,6 +40,7 @@ public class ApartmentListFragment extends Fragment {
     private static ArrayList<Apartment> _apartments;
     private CustomAdapter _adapter;
     private ApartmentDB _apartmentDB;
+    int _longClickedApartment;
 
     public ApartmentListFragment(){}
 
@@ -50,30 +49,23 @@ public class ApartmentListFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View layout = inflater.inflate(R.layout.fragment_apartment_list, container, false);
+        final View layout = inflater.inflate(R.layout.fragment_apartment_list, container, false);
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
-        registerForContextMenu(_lv);
-
-
-        //todo: LongClick.
-        _lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        _lv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return false;
-            }
-        });
-
-
-
-
-
-
-            _apartmentDB = ApartmentDB.getInstance();
+        _apartmentDB = ApartmentDB.getInstance();
         dummy();
         _apartments = _apartmentDB.getApartmentList();
         _adapter = new CustomAdapter(_apartments, inflater);
         _lv.setAdapter(_adapter);
+        this.registerForContextMenu(_lv);
+
+        _lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                _longClickedApartment = position;
+                return false;
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton)layout.findViewById(R.id.add_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,32 +76,33 @@ public class ApartmentListFragment extends Fragment {
         });
         return layout;
     }
+
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = this.getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
     }
 
-
     public boolean onContextItemSelected(MenuItem item) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.showApartment:
-               // editApartment(info.id);
                 return true;
             case R.id.editApartment:
-              //  editApartment(info.id);
                 return true;
             case R.id.sendApartment:
-            //    sendApartment(info.id);
                 return true;
             case R.id.deleteApartment:
-              //  deleteApartment(info.id);
+                Apartment currApartment = _apartments.get(_longClickedApartment);
+                ApartmentDB apartmentDB = ApartmentDB.getInstance();
+                apartmentDB.deleteApartment(currApartment.getId());
+                _apartments = apartmentDB.getApartmentList();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
+
 
     public void dummy(){
         Apartment ap1 = new Apartment(0);

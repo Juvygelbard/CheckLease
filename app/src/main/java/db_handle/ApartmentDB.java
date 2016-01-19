@@ -119,4 +119,9 @@ public class ApartmentDB {
             updatedRow.put("int_val", 0);
         db.update("apartments", updatedRow, "apartment_id=" + apartmentID + " AND field_id=" + Data.FAVORITE, null);
     }
+
+    public void deleteApartment(int apartmentID){
+        SQLiteDatabase db = _db.getWritableDatabase();
+        db.delete("apartment","apartment_id=" + apartmentID, null);
+    }
 }

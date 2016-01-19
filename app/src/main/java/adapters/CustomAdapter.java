@@ -6,7 +6,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
+import android.view.MenuInflater;
+
 
 import java.util.ArrayList;
 
@@ -49,10 +54,13 @@ public class CustomAdapter extends BaseAdapter {
 
         View row = _inflater.inflate(R.layout.row_apartment, parent, false );
 
+
+
         TextView address = (TextView) row.findViewById(R.id.address);
         TextView subTitle = (TextView) row.findViewById(R.id.subtitle);
         ImageView rateImg = (ImageView) row.findViewById(R.id.image_rate);
         final ImageButton favoriteImg = (ImageButton) row.findViewById(R.id.button_favorite);
+        favoriteImg.setFocusable(false);
 
         final Apartment curr = _allApartments.get(position);
 
@@ -70,10 +78,12 @@ public class CustomAdapter extends BaseAdapter {
                 ApartmentDB apartmentDB = ApartmentDB.getInstance();
                 if(curr.isFavorite()) {
                     favoriteImg.setImageResource(R.drawable.star_empty_grey);
+                    curr.setFavorite(false);
                     apartmentDB.setFavorite(curr.getId(), false);
                 }
                 else {
                     favoriteImg.setImageResource(R.drawable.star_full_orange);
+                    curr.setFavorite(true);
                     apartmentDB.setFavorite(curr.getId(), true);
                 }
             }
