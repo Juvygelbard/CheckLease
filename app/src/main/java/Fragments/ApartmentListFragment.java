@@ -96,7 +96,8 @@ public class ApartmentListFragment extends Fragment {
                 Apartment currApartment = _apartments.get(_longClickedApartment);
                 ApartmentDB apartmentDB = ApartmentDB.getInstance();
                 apartmentDB.deleteApartment(currApartment.getId());
-                _apartments = apartmentDB.getApartmentList();
+                _apartments.remove(_longClickedApartment);
+                _adapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onContextItemSelected(item);

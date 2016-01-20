@@ -55,8 +55,8 @@ public class FieldDB {
                 String name = curr.getString(colName);
                 int type = curr.getInt(colType);
                 String formula = curr.getString(colFormula);
-                int extra1 = curr.getInt(colExtra1);
-                String extra2 = curr.getString(colExtra2);
+                String extra1 = curr.getString(colExtra1);
+                int extra2 = curr.getInt(colExtra2);
                 Field toAdd = new Field(id, name, type, extra1, extra2, formula);
                 fieldList.add(toAdd);
                 curr.moveToNext();

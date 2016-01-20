@@ -122,6 +122,6 @@ public class ApartmentDB {
 
     public void deleteApartment(int apartmentID){
         SQLiteDatabase db = _db.getWritableDatabase();
-        db.delete("apartment","apartment_id=" + apartmentID, null);
+        db.delete("apartments","apartment_id=" + apartmentID, null);
     }
 }

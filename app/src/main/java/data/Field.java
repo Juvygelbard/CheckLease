@@ -1,6 +1,6 @@
 package data;
 import Formula.Formula;
-
+import java.util.ArrayList;
 
 /**
  * Created by user on 30/12/2015.
@@ -14,11 +14,11 @@ public class Field {
     private int _id;
     private String _name;
     private int _type;
-    private int _ex1;
-    private String _ex2;
+    private String _ex1;
+    private int _ex2;
     private Formula _formula;
 
-    public Field(int id, String name, int type, int ex1, String ex2, String formula){
+    public Field(int id, String name, int type, String ex1, int ex2, String formula){
         _id = id;
         _name = name;
         _type = type;
@@ -35,14 +35,23 @@ public class Field {
     public int getType(){
         return _type;
     }
-    public int getEx1(){
+    public String getEx1(){
         return _ex1;
     }
-    public String getEx2(){
+    public int getEx2(){
         return _ex2;
     }
     public int calculate(int X, int Y){
         return _formula.toSolve(X, Y);
     }
 
+    public static int calculateFieldList(ArrayList<Integer> params, ArrayList<Field> fields){
+        if(params.size() != fields.size())
+            throw new RuntimeException("Number of params must be the same as the number of fields!");
+        int score = 0;
+        for(int i=0; i< params.size(); i++){
+            score = fields.get(i).calculate(score, params.get(i));
+        }
+        return score;
+    }
 }
