@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/showApartment"
-        android:title="הצג"/>
+    <group android:id="@+id/Group1">
+        <item android:id="@+id/editApartment"
+            android:title="עריכת דירה"/>
 
-    <item android:id="@+id/editApartment"
-        android:title="ערוך"/>
+        <item android:id="@+id/sendApartment"
+            android:title="שליחת דירה"/>
 
-    <item android:id="@+id/sendApartment"
-        android:title="שלח"/>
+        <item android:id="@+id/callApartment"
+            android:title="התקשר לאיש קשר"/>
+    </group>
 
-    <item android:id="@+id/deleteApartment"
-        android:title="מחק"/>
-
+    <group android:id="@+id/Group2">
+        <item android:id="@+id/deleteApartment"
+            android:title="מחיקת דירה"
+            />
+    </group>
 </menu>
+

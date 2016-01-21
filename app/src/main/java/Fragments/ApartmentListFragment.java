@@ -5,11 +5,11 @@ package Fragments;
  */
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +21,26 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 
 
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import adapters.CustomAdapter;
 import bgu_apps.checklease.AddApartment;
 import bgu_apps.checklease.R;
 import data.Apartment;
 import data.Data;
+import data.Value;
 import db_handle.ApartmentDB;
 import android.view.MenuItem;
-import android.widget.Toast;
+
 
 
 public class ApartmentListFragment extends Fragment {
@@ -41,6 +50,7 @@ public class ApartmentListFragment extends Fragment {
     private CustomAdapter _adapter;
     private ApartmentDB _apartmentDB;
     int _longClickedApartment;
+    String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/apartmentsToSend";
 
     public ApartmentListFragment(){}
 
@@ -74,6 +84,10 @@ public class ApartmentListFragment extends Fragment {
                 ApartmentListFragment.this.startActivity(addApartment);
             }
         });
+
+        File dir = new File(_pathFiles);
+        dir.mkdirs();
+
         return layout;
     }
 
@@ -86,11 +100,20 @@ public class ApartmentListFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.showApartment:
-                return true;
             case R.id.editApartment:
                 return true;
             case R.id.sendApartment:
+                String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".clt";
+                File file = new File(filePath);
+                saveFile(file,_apartments.get(_longClickedApartment).getFeatureIterator());
+                Uri fileUri = Uri.parse(filePath);
+                Intent msgIntent = new Intent();
+                msgIntent.setAction(Intent.ACTION_SEND);
+                msgIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                msgIntent.setType("*/*");
+                this.getActivity().startActivity(msgIntent);
+                return true;
+            case R.id.callApartment:
                 return true;
             case R.id.deleteApartment:
                 Apartment currApartment = _apartments.get(_longClickedApartment);
@@ -104,8 +127,64 @@ public class ApartmentListFragment extends Fragment {
         }
     }
 
+    public static void saveFile(File file, Iterator<HashMap.Entry<Integer, Value>> iterator){
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            try {
+                while (iterator.hasNext()) {
+                    HashMap.Entry pair = (HashMap.Entry) iterator.next();
+                    Value v = (Value) pair.getValue();
+                    String value = v.toString();
+                    String key = pair.getKey().toString();
+                    fos.write(key.getBytes());
+                    fos.write(Data.LINE_SEPARATOR.getBytes());
+                    fos.write(value.getBytes());
+                    fos.write(Data.LINE_SEPARATOR.getBytes());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (FileNotFoundException e) {e.printStackTrace();}
+    }
 
-    public void dummy(){
+
+
+//todo: this is not the location of this method! we need to move it when we will preform the getting and reading files of apartments.
+//todo: complete: need to insert from String[] toTheFields to the HashMap apartmentDetails. make sure how we make a different between the files that are int an the String ones.
+    public static HashMap<Integer, Value> loadFile(File file){
+        HashMap<Integer, Value> apartmentDetails = new HashMap<Integer, Value>();
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            try {
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader br = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                String fromFile = br.readLine();
+                while (fromFile != null) {
+                    sb.append(fromFile);
+                    fromFile = br.readLine();
+                }
+                fromFile = sb.toString();
+                String[] toTheFields = fromFile.split(Data.LINE_SEPARATOR);
+
+                //to complete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                return apartmentDetails;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }catch (FileNotFoundException e) {e.printStackTrace();}
+            return apartmentDetails;
+        }
+
+        public void dummy(){
         Apartment ap1 = new Apartment(0);
         ap1.addValue(Data.FAVORITE, 0);
         ap1.addValue(Data.STREET, "יוסף בן מתתיהו");

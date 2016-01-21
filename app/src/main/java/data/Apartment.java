@@ -47,11 +47,11 @@ public class Apartment {
     public String getAddress(){
         String street = this.getValue(Data.STREET).getStrValue();
         int building = this.getValue(Data.BUILDING).getIntValue();
-        int numAppartment = this.getValue(Data.NUM_APARTMENT).getIntValue();
-        if(numAppartment == -1)
+        int numApartment = this.getValue(Data.NUM_APARTMENT).getIntValue();
+        if(numApartment == -1)
             return street + " " + building;
         else
-            return street + " " + building + "/" + numAppartment;
+            return street + " " + building + "/" + numApartment;
     }
 
     public void setFavorite(boolean fav){

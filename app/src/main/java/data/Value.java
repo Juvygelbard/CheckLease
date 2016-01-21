@@ -27,6 +27,10 @@ public class Value {
     }
 
     public String toString(){
-        return "(" + _strValue + "," + _intValue + ")";
+
+        if(_strValue.equals("NULL"))
+            return "" + _intValue;
+        else
+            return _strValue;
     }
 }

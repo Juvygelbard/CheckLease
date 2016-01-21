@@ -10,6 +10,9 @@ public class Data {
     private static String _city = "BG";
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
+    public static final String LINE_SEPARATOR = String.valueOf((char)178);
+
+
     public static final int FAVORITE = 0;
     public static final int STREET = 1;
     public static final int BUILDING = 2;
