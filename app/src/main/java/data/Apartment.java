@@ -18,6 +18,11 @@ public class Apartment {
         _id = id;
     }
 
+    public Apartment(int id, HashMap<Integer , Value> apartmentDetails){
+        _apartmentDetails = apartmentDetails;
+        _id = id;
+    }
+
     public Value getValue(int i){
         if (_apartmentDetails.containsKey(i))
             return _apartmentDetails.get(i);

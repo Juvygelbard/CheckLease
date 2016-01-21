@@ -29,8 +29,8 @@ public class Value {
     public String toString(){
 
         if(_strValue.equals("NULL"))
-            return "" + _intValue;
+            return "Integer" + Data.LINE_SEPARATOR + _intValue;
         else
-            return _strValue;
+            return "String" + Data.LINE_SEPARATOR + _strValue;
     }
 }

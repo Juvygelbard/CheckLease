@@ -157,7 +157,6 @@ public class ApartmentListFragment extends Fragment {
 
 
 //todo: this is not the location of this method! we need to move it when we will preform the getting and reading files of apartments.
-//todo: complete: need to insert from String[] toTheFields to the HashMap apartmentDetails. make sure how we make a different between the files that are int an the String ones.
     public static HashMap<Integer, Value> loadFile(File file){
         HashMap<Integer, Value> apartmentDetails = new HashMap<Integer, Value>();
         try {
@@ -173,9 +172,16 @@ public class ApartmentListFragment extends Fragment {
                 }
                 fromFile = sb.toString();
                 String[] toTheFields = fromFile.split(Data.LINE_SEPARATOR);
-
-                //to complete!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+                for(int i = 0 ; i <= toTheFields.length - 3 ; i = i+3){
+                    if(toTheFields[i+1].equals("Integer")){
+                        int value = Integer.valueOf(toTheFields[i+2]);
+                        apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
+                    }
+                    else if(toTheFields[i+1].equals("String")){
+                        String value = toTheFields[1+2];
+                        apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
+                    }
+                }
                 return apartmentDetails;
             } catch (IOException e) {
                 e.printStackTrace();
