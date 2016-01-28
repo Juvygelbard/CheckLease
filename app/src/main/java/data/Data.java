@@ -19,6 +19,9 @@ public class Data {
     public static final int NUM_APARTMENT = 3;
     public static final int PHONE = 4;
 
+    public static final float LOW_PRICE_BAR = 1.05f;
+    public static final float HIGH_PRICE_BAR = 1.3f;
+
     private Data(){}
 
     public static String getCity(){ return _city; }
@@ -41,5 +44,15 @@ public class Data {
 
     public static void increaseApartmentCounter(){
         _apartmentCounter++;
+    }
+
+    public static int getRate(int calcPrice, int givenPrice){
+        float norm = (float) givenPrice / (float) calcPrice;
+        if(norm <= LOW_PRICE_BAR)
+            return 0;
+        else if(norm <= HIGH_PRICE_BAR)
+            return 1;
+        else
+            return 2;
     }
 }

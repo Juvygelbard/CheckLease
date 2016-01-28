@@ -19,6 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddApartment"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAkmQ7m2wJWcq0pHpQtt8kmZbgdXbOGQIs"/>
     </application>
 
 </manifest>
