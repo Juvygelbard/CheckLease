@@ -62,7 +62,7 @@
                     android:layout_weight="1"
                     android:inputType="number"
                     android:gravity="center"
-                    android:ems="10"
+                    android:selectAllOnFocus="true"
                     android:id="@+id/txtApartmentNumber" />
 
                 <TextView
@@ -74,6 +74,47 @@
                     android:gravity="center_vertical"
                     android:textSize="20dp"
                     android:textColor="#000000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#d7d7d7">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="100">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_photo_camera"
+                        android:layout_gravity="bottom"
+                        android:src="@drawable/add_photo_camera" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_photo_gallery"
+                        android:layout_gravity="top"
+                        android:src="@drawable/add_photo_gallery" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/horizontalScrollView" >
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/image_gallery"></LinearLayout>
+                </HorizontalScrollView>
+
             </LinearLayout>
 
             <LinearLayout
@@ -99,6 +140,7 @@
                     android:id="@+id/txvPrice"
                     android:gravity="center_vertical"
                     android:textSize="20dp"
+                    android:selectAllOnFocus="true"
                     android:textColor="#000000" />
             </LinearLayout>
         </LinearLayout>

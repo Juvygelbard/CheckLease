@@ -39,6 +39,8 @@ import data.Apartment;
 import data.Data;
 import data.Value;
 import db_handle.ApartmentDB;
+import db_handle.PicturesDB;
+
 import android.view.MenuItem;
 
 
@@ -80,6 +82,10 @@ public class ApartmentListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // remove temp pictures, if there are any
+//                PicturesDB picsDB = PicturesDB.getInstance();
+//                picsDB.removeTempPics();
+                // load activity
                 Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), AddApartment.class);
                 ApartmentListFragment.this.startActivity(addApartment);
             }

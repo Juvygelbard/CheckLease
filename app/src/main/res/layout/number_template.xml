@@ -10,6 +10,7 @@
             android:layout_weight="1"
             android:inputType="number"
             android:gravity="center"
+            android:selectAllOnFocus="true"
             android:id="@+id/txtNumber" />
 
         <TextView

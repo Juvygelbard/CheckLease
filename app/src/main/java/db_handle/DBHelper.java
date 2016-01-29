@@ -22,8 +22,11 @@ public class DBHelper extends SQLiteOpenHelper{
             "extra1 TEXT, " +
             "extra2 INTEGER, " +
             "order_i INTEGER);";
+    private static final String _PICTURES_MAKE_QUERY = "CREATE TABLE pics(apartment_id INTEGER, " +
+            "path TEXT);";
     private static final String _APARTMENT_DROP_QUERY = "DROP TABLE IF EXISTS apartments;";
     private static final String _FIELDS_DROP_QUERY = "DROP TABLE IF EXISTS fields;";
+    private static final String _PICTURES_DROP_QUERY = "DROP TABLE IF EXISTS pics;";
 
     public DBHelper(Context context) {
         super(context, _DB_NAME, null, 1);
@@ -33,12 +36,14 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(_FIELDS_MAKE_QUERY);
         db.execSQL(_APARTMENT_MAKE_QUERY);
+        db.execSQL(_PICTURES_MAKE_QUERY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(_FIELDS_DROP_QUERY);
         db.execSQL(_APARTMENT_DROP_QUERY);
+        db.execSQL(_PICTURES_DROP_QUERY);
         onCreate(db);
     }
 }
