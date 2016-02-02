@@ -15,34 +15,32 @@ public class PicturesDB
     private static PicturesDB _instance;
     private final int TEMP_ID = -1;
 
-        public static void init(DBHelper db){
+    public static void init(DBHelper db){
             _db = db;
         }
 
-        private PicturesDB(){ }
+    private PicturesDB(){ }
 
-        public static PicturesDB getInstance(){
-            if(_instance == null)
-                _instance = new PicturesDB();
-            return _instance; }
+    public static PicturesDB getInstance(){
+        if(_instance == null)
+            _instance = new PicturesDB();
+        return _instance; }
 
-        public ArrayList<String> getPicturePathList(int apartmentID){
-            ArrayList<String> pics = new ArrayList<String>();
-            SQLiteDatabase db = _db.getReadableDatabase();
-            String col[] = {"apartment_id", "path"};
-            Cursor curr = db.query("pics", col, "apartment_id=" + apartmentID , null, null, null, null);
-
-            if(curr.moveToFirst()){
-                int pathCol = curr.getColumnIndex("path");
-
-                while(!curr.isAfterLast()){
-                    String path = curr.getString(pathCol);
-                    pics.add(path);
-                    curr.moveToNext();
-                }
+    public ArrayList<String> getPicturePathList(int apartmentID){
+        ArrayList<String> pics = new ArrayList<String>();
+        SQLiteDatabase db = _db.getReadableDatabase();
+        String col[] = {"apartment_id", "path"};
+        Cursor curr = db.query("pics", col, "apartment_id=" + apartmentID , null, null, null, null);
+        if(curr.moveToFirst()){
+            int pathCol = curr.getColumnIndex("path");
+            while(!curr.isAfterLast()){
+                String path = curr.getString(pathCol);
+                pics.add(path);
+                curr.moveToNext();
             }
-            return pics;
         }
+        return pics;
+    }
 
     public ArrayList<String> getTempPics(){
         return getPicturePathList(TEMP_ID);

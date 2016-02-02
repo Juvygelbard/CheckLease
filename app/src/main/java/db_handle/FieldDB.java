@@ -91,7 +91,7 @@ public class FieldDB {
 
         ContentValues washingMachine = new ContentValues();
         washingMachine.put("id", 5);
-        washingMachine.put("order_i", 1);
+        washingMachine.put("order_i", 3);
         washingMachine.put("city", "BG");
         washingMachine.put("name", "מכונת כביסה");
         washingMachine.put("type", Field.CHECKBOX);
@@ -99,5 +99,16 @@ public class FieldDB {
         washingMachine.put("extra1", "");
         washingMachine.put("extra2", 0);
         db.insert("fields", null, washingMachine);
+
+        ContentValues phoneRes = new ContentValues();
+        phoneRes.put("id", 2);
+        phoneRes.put("order_i", 0);
+        phoneRes.put("city", "BG");
+        phoneRes.put("name", "טלפון דיירים");
+        phoneRes.put("type", Field.PHONE);
+        phoneRes.put("formula", "X");
+        phoneRes.put("extra1", "");
+        phoneRes.put("extra2", 0);
+        db.insert("fields", null, phoneRes);
     }
 }

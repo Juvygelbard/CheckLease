@@ -14,10 +14,11 @@ public class Data {
 
 
     public static final int FAVORITE = 0;
-    public static final int STREET = 1;
-    public static final int BUILDING = 2;
-    public static final int NUM_APARTMENT = 3;
-    public static final int PHONE = 4;
+    public static final int ADDRESS_ID = 1;
+    public static final int ADDRESS = 2;
+    public static final int APARTMENT_NUM = 3;
+    public static final int GIVEN_PRICE = 4;
+    public static final int CALC_PRICE = 5;
 
     public static final float LOW_PRICE_BAR = 1.05f;
     public static final float HIGH_PRICE_BAR = 1.3f;
@@ -47,12 +48,14 @@ public class Data {
     }
 
     public static int getRate(int calcPrice, int givenPrice){
+        if(givenPrice == 0)
+            return 0;
         float norm = (float) givenPrice / (float) calcPrice;
         if(norm <= LOW_PRICE_BAR)
-            return 0;
-        else if(norm <= HIGH_PRICE_BAR)
             return 1;
-        else
+        else if(norm <= HIGH_PRICE_BAR)
             return 2;
+        else
+            return 3;
     }
 }

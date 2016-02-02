@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddApartment"></activity>
+        <activity android:name=".EditApartment"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAkmQ7m2wJWcq0pHpQtt8kmZbgdXbOGQIs"/>

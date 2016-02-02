@@ -19,10 +19,10 @@ import data.Data;
 import db_handle.ApartmentDB;
 import db_handle.FieldDB;
 import db_handle.DBHelper;
+import db_handle.PicturesDB;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         DBHelper db = new DBHelper(this.getApplicationContext());
         ApartmentDB.init(db);
         FieldDB.init(db);
+        PicturesDB.init(db);
 
         FieldDB fieldDB = FieldDB.getInstance();
         fieldDB.dummy(); // TODO: REMOVE!

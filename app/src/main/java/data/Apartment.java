@@ -49,14 +49,17 @@ public class Apartment {
         _apartmentDetails.put(id, value);
     }
 
+    public void addValue(int id, Value val){
+        _apartmentDetails.put(id, val);
+    }
+
     public String getAddress(){
-        String street = this.getValue(Data.STREET).getStrValue();
-        int building = this.getValue(Data.BUILDING).getIntValue();
-        int numApartment = this.getValue(Data.NUM_APARTMENT).getIntValue();
-        if(numApartment == -1)
-            return street + " " + building;
+        String address = this.getValue(Data.ADDRESS).getStrValue();
+        int apartmentNum = this.getValue(Data.APARTMENT_NUM).getIntValue();
+        if(apartmentNum == -1)
+            return address;
         else
-            return street + " " + building + "/" + numApartment;
+            return address + "/" + apartmentNum;
     }
 
     public void setFavorite(boolean fav){
@@ -68,5 +71,13 @@ public class Apartment {
 
     public boolean isFavorite(){
         return _apartmentDetails.get(Data.FAVORITE).getIntValue() == 1;
+    }
+
+    public int getGivenPrice(){
+        return _apartmentDetails.get(Data.GIVEN_PRICE).getIntValue();
+    }
+
+    public int getCalcPrice(){
+        return _apartmentDetails.get(Data.CALC_PRICE).getIntValue();
     }
 }

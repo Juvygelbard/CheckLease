@@ -6,17 +6,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
-import android.view.MenuInflater;
-
-
 import java.util.ArrayList;
-
 import data.Apartment;
 import bgu_apps.checklease.R;
+import data.Data;
 import db_handle.ApartmentDB;
 
 /**
@@ -27,12 +21,10 @@ public class CustomAdapter extends BaseAdapter {
     private LayoutInflater _inflater;
     private ArrayList<Apartment> _allApartments;
 
-
     public CustomAdapter(ArrayList<Apartment> allApartments, LayoutInflater inflater){
         _allApartments = allApartments;
         _inflater = inflater;
     }
-
 
     @Override
     public int getCount() {
@@ -67,11 +59,27 @@ public class CustomAdapter extends BaseAdapter {
 
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
         subTitle.setText("" + curr.getId()); // todo: complete!
-        rateImg.setImageResource(R.drawable.home_grey); // todo: complete!
+        int rate = Data.getRate(curr.getCalcPrice(), curr.getGivenPrice());
+        // determine color
+        switch(rate){
+            case 0:
+                rateImg.setImageResource(R.drawable.home_grey);
+                break;
+            case 1:
+                rateImg.setImageResource(R.drawable.home_green);
+                break;
+            case 2:
+                rateImg.setImageResource(R.drawable.home_orange);
+                break;
+            case 3:
+                rateImg.setImageResource(R.drawable.home_red);
+                break;
+        }
         if(curr.isFavorite())
             favoriteImg.setImageResource(R.drawable.star_full_orange);
         else
             favoriteImg.setImageResource(R.drawable.star_empty_grey);
+
         favoriteImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +96,6 @@ public class CustomAdapter extends BaseAdapter {
                 }
             }
         });
-
 
         return row;
     }

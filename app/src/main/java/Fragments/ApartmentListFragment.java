@@ -33,13 +33,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import adapters.CustomAdapter;
-import bgu_apps.checklease.AddApartment;
+import bgu_apps.checklease.EditApartment;
 import bgu_apps.checklease.R;
 import data.Apartment;
 import data.Data;
 import data.Value;
 import db_handle.ApartmentDB;
-import db_handle.PicturesDB;
 
 import android.view.MenuItem;
 
@@ -47,24 +46,33 @@ import android.view.MenuItem;
 
 public class ApartmentListFragment extends Fragment {
 
+    private static ApartmentListFragment _instance;
     private ListView _lv;
-    private static ArrayList<Apartment> _apartments;
-    private CustomAdapter _adapter;
+    public static ArrayList<Apartment> _apartments;
+    private static CustomAdapter _adapter;
     private ApartmentDB _apartmentDB;
     int _longClickedApartment;
     String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/apartmentsToSend";
-
-    public ApartmentListFragment(){}
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
 
+    public static ApartmentListFragment get_instance(){
+        return _instance;
+    }
+
+    public void refreshList(){
+        _apartments.clear();
+        _apartments.addAll(_apartmentDB.getApartmentList());
+        _adapter.notifyDataSetChanged();
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View layout = inflater.inflate(R.layout.fragment_apartment_list, container, false);
+        _instance = this;
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
         _apartmentDB = ApartmentDB.getInstance();
-        dummy();
         _apartments = _apartmentDB.getApartmentList();
         _adapter = new CustomAdapter(_apartments, inflater);
         _lv.setAdapter(_adapter);
@@ -82,11 +90,8 @@ public class ApartmentListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // remove temp pictures, if there are any
-//                PicturesDB picsDB = PicturesDB.getInstance();
-//                picsDB.removeTempPics();
-                // load activity
-                Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), AddApartment.class);
+                Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), EditApartment.class);
+                addApartment.putExtra("AppIndex", -1);
                 ApartmentListFragment.this.startActivity(addApartment);
             }
         });
@@ -107,6 +112,9 @@ public class ApartmentListFragment extends Fragment {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.editApartment:
+                Intent editApartment = new Intent(ApartmentListFragment.this.getActivity(), EditApartment.class);
+                editApartment.putExtra("AppIndex", _longClickedApartment);
+                ApartmentListFragment.this.startActivity(editApartment);
                 return true;
             case R.id.sendApartment:
                 String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".clt";
@@ -133,6 +141,7 @@ public class ApartmentListFragment extends Fragment {
         }
     }
 
+    // TODO: WHY STATIC????
     public static void saveFile(File file, Iterator<HashMap.Entry<Integer, Value>> iterator){
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -195,32 +204,4 @@ public class ApartmentListFragment extends Fragment {
             }catch (FileNotFoundException e) {e.printStackTrace();}
             return apartmentDetails;
         }
-
-        public void dummy(){
-        Apartment ap1 = new Apartment(0);
-        ap1.addValue(Data.FAVORITE, 0);
-        ap1.addValue(Data.STREET, "יוסף בן מתתיהו");
-        ap1.addValue(Data.BUILDING, 72);
-        ap1.addValue(Data.NUM_APARTMENT, 4);
-        Apartment ap2 = new Apartment(1);
-        ap2.addValue(Data.FAVORITE, 0);
-        ap2.addValue(Data.STREET, "קדש");
-        ap2.addValue(Data.BUILDING, 72);
-        ap2.addValue(Data.NUM_APARTMENT, 4);
-        Apartment ap3 = new Apartment(2);
-        ap3.addValue(Data.FAVORITE, 0);
-        ap3.addValue(Data.STREET, "סימטת הבשור");
-        ap3.addValue(Data.BUILDING, 72);
-        ap3.addValue(Data.NUM_APARTMENT, 4);
-        Apartment ap4 = new Apartment(3);
-        ap4.addValue(Data.FAVORITE, 0);
-        ap4.addValue(Data.STREET, "וינגייט");
-        ap4.addValue(Data.BUILDING, 72);
-        ap4.addValue(Data.NUM_APARTMENT, 4);
-
-        _apartmentDB.addApartment(ap1);
-        _apartmentDB.addApartment(ap2);
-        _apartmentDB.addApartment(ap3);
-        _apartmentDB.addApartment(ap4);
-    }
 }

@@ -22,7 +22,7 @@
                 android:text="@string/AddApartmentTitle"
                 android:textSize="@dimen/title_size"
                 android:layout_gravity="right"
-                android:id="@+id/textView" />
+                android:id="@+id/txvTitle" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -63,7 +63,7 @@
                     android:inputType="number"
                     android:gravity="center"
                     android:selectAllOnFocus="true"
-                    android:id="@+id/txtApartmentNumber" />
+                    android:id="@+id/txtApartmentNum" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -80,12 +80,14 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 android:background="#d7d7d7">
 
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/add_photo_platte"
                     android:alpha="100">
 
                     <ImageButton
@@ -101,6 +103,29 @@
                         android:id="@+id/add_photo_gallery"
                         android:layout_gravity="top"
                         android:src="@drawable/add_photo_gallery" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="100"
+                    android:visibility="gone"
+                    android:id="@+id/remove_photo_platte">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/remove_photo"
+                        android:layout_gravity="bottom"
+                        android:src="@drawable/remove_photo" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/back_to_add"
+                        android:layout_gravity="top"
+                        android:src="@drawable/remove_photo_back" />
                 </LinearLayout>
 
                 <HorizontalScrollView
@@ -123,26 +148,48 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp">
 
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/home_grey"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/rate_house" />
+
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:inputType="number"
                     android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="30dp"
                     android:ems="10"
                     android:id="@+id/txtPrice" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="מחיר"
                     android:id="@+id/txvPrice"
-                    android:gravity="center_vertical"
-                    android:textSize="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="30dp"
                     android:selectAllOnFocus="true"
                     android:textColor="#000000" />
             </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/add_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/save_btn"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:onClick="saveApartment"
+                app:fabSize="normal"
+                />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

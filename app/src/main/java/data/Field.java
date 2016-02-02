@@ -10,6 +10,7 @@ public class Field {
     public static final int MULTISELECT = 1;
     public static final int NUMBER = 2;
     public static final int TEXT = 3;
+    public static final int PHONE = 4;
 
     private int _id;
     private String _name;
@@ -45,12 +46,17 @@ public class Field {
         return _formula.toSolve(X, Y);
     }
 
-    public static int calculateFieldList(ArrayList<Integer> params, ArrayList<Field> fields){
+    public static int calculateFieldList(ArrayList<Value> params, ArrayList<Field> fields){
         if(params.size() != fields.size())
             throw new RuntimeException("Number of params must be the same as the number of fields!");
         int score = 0;
         for(int i=0; i< params.size(); i++){
-            score = fields.get(i).calculate(score, params.get(i));
+            Field field = fields.get(i);
+            Value param = params.get(i);
+            if(field.getType() == CHECKBOX || field.getType() == MULTISELECT)
+                score = field.calculate(score, param.getIntValue());
+            else if(field.getType() == NUMBER)
+                score = field.calculate(score, Integer.parseInt(param.getStrValue()));
         }
         return score;
     }
