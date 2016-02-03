@@ -2,6 +2,7 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ScrollView
@@ -10,7 +11,6 @@
         android:id="@+id/scrollView" >
 
         <LinearLayout
-            android:padding="@dimen/padding"
             android:orientation="vertical"
             android:id="@+id/mainLayout"
             android:layout_width="match_parent"
@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/AddApartmentTitle"
-                android:textSize="@dimen/title_size"
+                android:textSize="30dp"
                 android:layout_gravity="right"
                 android:id="@+id/txvTitle" />
 
@@ -28,7 +28,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp">
+                android:minHeight="@dimen/field_height">
 
                 <fragment
                     android:id="@+id/acfAddress"
@@ -54,12 +54,13 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp">
+                android:minHeight="@dimen/field_height">
 
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:inputType="number"
                     android:gravity="center"
                     android:selectAllOnFocus="true"
@@ -69,6 +70,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:text="מספר דירה"
                     android:id="@+id/txvApartmentNumber"
                     android:gravity="center_vertical"
@@ -162,6 +164,7 @@
                     android:inputType="number"
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
+                    android:selectAllOnFocus="true"
                     android:textSize="30dp"
                     android:ems="10"
                     android:id="@+id/txtPrice" />
@@ -173,7 +176,6 @@
                     android:id="@+id/txvPrice"
                     android:layout_gravity="center_vertical"
                     android:textSize="30dp"
-                    android:selectAllOnFocus="true"
                     android:textColor="#000000" />
             </LinearLayout>
 

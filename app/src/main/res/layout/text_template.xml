@@ -3,13 +3,14 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="right"
-    android:padding="5dp">
+    android:minHeight="@dimen/field_height">
     <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:inputType="textMultiLine"
-        android:gravity="center"
+        android:gravity="right"
+        android:layout_gravity="top"
         android:selectAllOnFocus="true"
         android:id="@+id/txtText" />
 

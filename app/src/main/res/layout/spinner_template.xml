@@ -3,29 +3,23 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="right"
-    android:padding="5dp">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:id="@+id/multi_template">
+    android:minHeight="@dimen/field_height">
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_gravity="center_vertical"
             android:id="@+id/sprSpinner" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center_vertical"
             android:text="שדה"
             android:textSize="20dp"
             android:textColor="#000000"
             android:id="@+id/txvSpinner" />
-    </LinearLayout>
 </LinearLayout>
