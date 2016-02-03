@@ -79,7 +79,7 @@ public class FieldDB {
         db.insert("fields", null, neighborhood);
 
         ContentValues appartmentSize = new ContentValues();
-        appartmentSize.put("id", 4);
+        appartmentSize.put("id", 0);
         appartmentSize.put("order_i", 2);
         appartmentSize.put("city", "BG");
         appartmentSize.put("name", "גודל דירה");
@@ -90,7 +90,7 @@ public class FieldDB {
         db.insert("fields", null, appartmentSize);
 
         ContentValues washingMachine = new ContentValues();
-        washingMachine.put("id", 5);
+        washingMachine.put("id", 1);
         washingMachine.put("order_i", 3);
         washingMachine.put("city", "BG");
         washingMachine.put("name", "מכונת כביסה");
@@ -102,7 +102,7 @@ public class FieldDB {
 
         ContentValues phoneRes = new ContentValues();
         phoneRes.put("id", 2);
-        phoneRes.put("order_i", 0);
+        phoneRes.put("order_i", 4);
         phoneRes.put("city", "BG");
         phoneRes.put("name", "טלפון דיירים");
         phoneRes.put("type", Field.PHONE);
@@ -110,5 +110,16 @@ public class FieldDB {
         phoneRes.put("extra1", "");
         phoneRes.put("extra2", 0);
         db.insert("fields", null, phoneRes);
+
+        ContentValues desc = new ContentValues();
+        desc.put("id", 4);
+        desc.put("order_i", 5);
+        desc.put("city", "BG");
+        desc.put("name", "תיאור כללי");
+        desc.put("type", Field.TEXT);
+        desc.put("formula", "X");
+        desc.put("extra1", "תאר את הדירה.");
+        desc.put("extra2", 4);
+        db.insert("fields", null, desc);
     }
 }

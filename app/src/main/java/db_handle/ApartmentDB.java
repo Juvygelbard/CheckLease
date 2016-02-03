@@ -101,13 +101,12 @@ public class ApartmentDB {
 
             ContentValues feature = new ContentValues();
             feature.put("city", Data.getCity());
-            feature.put("apartment_id", Data.getCurrApartmentCounter());
+            feature.put("apartment_id", toAdd.getId());
             feature.put("field_id", fieldID);
             feature.put("int_val", intVal);
             feature.put("str_val", strVal);
             db.insert("apartments", null, feature);
         }
-        Data.increaseApartmentCounter();
     }
 
     public void setFavorite(int apartmentID ,boolean state){

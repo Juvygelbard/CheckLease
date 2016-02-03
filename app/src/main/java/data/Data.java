@@ -13,12 +13,12 @@ public class Data {
     public static final String LINE_SEPARATOR = String.valueOf((char)178);
 
 
-    public static final int FAVORITE = 0;
-    public static final int ADDRESS_ID = 1;
-    public static final int ADDRESS = 2;
-    public static final int APARTMENT_NUM = 3;
-    public static final int GIVEN_PRICE = 4;
-    public static final int CALC_PRICE = 5;
+    public static final int FAVORITE = -1;
+    public static final int ADDRESS_ID = -2;
+    public static final int ADDRESS = -3;
+    public static final int APARTMENT_NUM = -4;
+    public static final int GIVEN_PRICE = -5;
+    public static final int CALC_PRICE = -6;
 
     public static final float LOW_PRICE_BAR = 1.05f;
     public static final float HIGH_PRICE_BAR = 1.3f;

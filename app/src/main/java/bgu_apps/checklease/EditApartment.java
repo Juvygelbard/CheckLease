@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.net.Uri;
 
+import android.widget.Toast;
 import Fragments.ApartmentListFragment;
 import data.Apartment;
 import data.Value;
@@ -48,7 +49,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 import static bgu_apps.checklease.R.layout.activity_edit_apartment;
-import static bgu_apps.checklease.R.layout.spinner_template;
 
 public class EditApartment extends AppCompatActivity {
     private int _appIndex;
@@ -59,6 +59,7 @@ public class EditApartment extends AppCompatActivity {
 
     private ArrayList<Field> _fieldsRaw;
     private ArrayList<View> _fieldsWidgets;
+    private Apartment _currApartment;
     private EditText _txtGivenPrice;
     private LinearLayout _addPhotoPlatte;
     private LinearLayout _removePhotoPlatte;
@@ -115,15 +116,14 @@ public class EditApartment extends AppCompatActivity {
         // build page
         TextView title = (TextView)this.findViewById(R.id.txvTitle);
         _txtGivenPrice = (EditText)this.findViewById(R.id.txtPrice);
-        Apartment currApartment = null;
         if(!_newApartment){
             title.setText("עריכת דירה");
-            currApartment = ApartmentListFragment._apartments.get(_appIndex);
-            _addressView.setText(currApartment.getValue(Data.ADDRESS).getStrValue());
+            _currApartment = ApartmentListFragment._apartments.get(_appIndex);
+            _addressView.setText(_currApartment.getValue(Data.ADDRESS).getStrValue());
             EditText apNum = (EditText)this.findViewById(R.id.txtApartmentNum);
-            if(currApartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
-                apNum.setText("" + currApartment.getValue(Data.APARTMENT_NUM).getIntValue());
-            _txtGivenPrice.setText("" + currApartment.getValue(Data.GIVEN_PRICE).getIntValue());
+            if(_currApartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
+                apNum.setText("" + _currApartment.getValue(Data.APARTMENT_NUM).getIntValue());
+            _txtGivenPrice.setText("" + _currApartment.getValue(Data.GIVEN_PRICE).getIntValue());
         }
         else
             title.setText("דירה חדשה");
@@ -142,11 +142,11 @@ public class EditApartment extends AppCompatActivity {
                             checkbox.callOnClick();
                         }
                     });
-                    if(_newApartment) {
+                    if(_newApartment || !_currApartment.hasField(field.getId())) {
                         checkbox.setChecked(field.getEx2() == 1);
                     }
                     else
-                        checkbox.setChecked(currApartment.getValue(field.getId()).getIntValue() == 1);
+                        checkbox.setChecked(_currApartment.getValue(field.getId()).getIntValue() == 1);
                     checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -158,24 +158,30 @@ public class EditApartment extends AppCompatActivity {
                     break;
                 case Field.NUMBER:
                     LinearLayout numberLayout = (LinearLayout)inflater.inflate(R.layout.number_template, null);
-                    final EditText edittext = (EditText)numberLayout.findViewById(R.id.txtNumber);
+                    final EditText editnum = (EditText)numberLayout.findViewById(R.id.txtNumber);
                     TextView numberLabel = (TextView)numberLayout.findViewById(R.id.txvNumber);
                     numberLabel.setText(field.getName());
-                    if(_newApartment)
-                        edittext.setText("" + field.getEx2());
+                    if(_newApartment || !_currApartment.hasField(field.getId()))
+                        editnum.setText("" + field.getEx2());
                     else
-                        edittext.setText("" + currApartment.getValue(field.getId()).getIntValue());
-                    edittext.addTextChangedListener(new TextWatcher() {
+                        editnum.setText("" + _currApartment.getValue(field.getId()).getIntValue());
+                    editnum.addTextChangedListener(new TextWatcher() {
                         @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
                         @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
                         @Override
                         public void afterTextChanged(Editable s) {
+                            if (editnum.getText().toString().equals(""))
+                                editnum.setText("0");
                             recalcPrice();
                         }
                     });
-                    _fieldsWidgets.add(edittext);
+                    _fieldsWidgets.add(editnum);
                     mainLayout.addView(numberLayout, mainLayout.getChildCount()-3);
                     break;
                 case Field.MULTISELECT:
@@ -188,10 +194,10 @@ public class EditApartment extends AppCompatActivity {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, items);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
                     spinner.setAdapter(adapter);
-                    if(_newApartment || currApartment.getValue(field.getId()).getIntValue() > spinner.getCount())
+                    if(_newApartment || !_currApartment.hasField(field.getId()) || _currApartment.getValue(field.getId()).getIntValue() > spinner.getCount())
                         spinner.setSelection(field.getEx2());
                     else
-                        spinner.setSelection(currApartment.getValue(field.getId()).getIntValue());
+                        spinner.setSelection(_currApartment.getValue(field.getId()).getIntValue());
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -209,10 +215,10 @@ public class EditApartment extends AppCompatActivity {
                     ImageButton callbutton = (ImageButton)phoneLayout.findViewById(R.id.callButton);
                     final TextView phoneLabel = (TextView)phoneLayout.findViewById(R.id.txvPhone);
                     phoneLabel.setText(field.getName());
-                    if(_newApartment)
+                    if(_newApartment || !_currApartment.hasField(field.getId()))
                         editphone.setText(field.getEx1());
                     else
-                        editphone.setText(currApartment.getValue(field.getId()).getStrValue());
+                        editphone.setText(_currApartment.getValue(field.getId()).getStrValue());
                     callbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -223,6 +229,19 @@ public class EditApartment extends AppCompatActivity {
                     });
                     _fieldsWidgets.add(editphone);
                     mainLayout.addView(phoneLayout, mainLayout.getChildCount()-3);
+                    break;
+                case Field.TEXT:
+                    LinearLayout textLayout = (LinearLayout)inflater.inflate(R.layout.text_template, null);
+                    final EditText edittext = (EditText)textLayout.findViewById(R.id.txtText);
+                    TextView textLabel = (TextView)textLayout.findViewById(R.id.txvText);
+                    textLabel.setText(field.getName());
+                    if(_newApartment || !_currApartment.hasField(field.getId()))
+                        edittext.setText(field.getEx1());
+                    else
+                        edittext.setText(_currApartment.getValue(field.getId()).getStrValue());
+                    edittext.setLines(field.getEx2());
+                    _fieldsWidgets.add(edittext);
+                    mainLayout.addView(textLayout, mainLayout.getChildCount()-3);
                     break;
             }
         }
@@ -250,7 +269,7 @@ public class EditApartment extends AppCompatActivity {
 
         // create image display
         if(!_newApartment){
-            ArrayList<String> picPathList = _picsDB.getPicturePathList(currApartment.getId());
+            ArrayList<String> picPathList = _picsDB.getPicturePathList(_currApartment.getId());
             for(String path: picPathList){
                 try {
                     Uri imageUri = Uri.parse(path);
@@ -333,15 +352,23 @@ public class EditApartment extends AppCompatActivity {
 
     }
 
-    public void saveApartment(View view){
-        int id = Data.getCurrApartmentCounter(); // get new apartment id
+    public Apartment extractApartment(int id){
         EditText apartmentNumView = (EditText)this.findViewById(R.id.txtApartmentNum);
         String apartmentNumStr = apartmentNumView.getText().toString();
         int apartmentNum = -1;
         if(!apartmentNumStr.equals(""))
             apartmentNum = Integer.parseInt(apartmentNumStr);
-        String addressStr = _address.getAddress().toString().replace(", ישראל", "");
-        String addressID = _address.getId();
+        String addressStr;
+        String addressID;
+        if(_address == null) // should only accur if it's an existing apartment!
+        {
+            addressStr = _currApartment.getValue(Data.ADDRESS).getStrValue();
+            addressID = _currApartment.getValue(Data.ADDRESS_ID).getStrValue();
+        }
+        else{ // should always accur for a new apartment
+            addressStr = _address.getAddress().toString().replace(", ישראל", "");
+            addressID = _address.getId();
+        }
         Apartment toAdd = new Apartment(id);
         ArrayList<Value> vals = extractVals();
         for(int i=0; i<vals.size(); i++) // add values
@@ -351,13 +378,39 @@ public class EditApartment extends AppCompatActivity {
         toAdd.addValue(Data.APARTMENT_NUM, apartmentNum);
         toAdd.addValue(Data.GIVEN_PRICE, _givenPrice);
         toAdd.addValue(Data.CALC_PRICE, _calcPrice);
-        toAdd.addValue(Data.FAVORITE, 0); // set favorite to non
-        ApartmentDB apartmentDB = ApartmentDB.getInstance();
-        apartmentDB.addApartment(toAdd);
-        _picsDB.saveTempPic(id);
+        return toAdd;
+    }
+
+    public void saveAndFinish(View view){
+        if(_newApartment && _address == null){ // no address was picked!
+            Toast msg = Toast.makeText(this.getApplicationContext(), "לא נבחרה כתובת!", Toast.LENGTH_SHORT);
+            msg.show();
+            return;
+        }
+        ApartmentDB apartmentDB = ApartmentDB.getInstance(); // get db
+        if(_newApartment) {
+            int id = Data.getCurrApartmentCounter(); // get new apartment id
+            Apartment toAdd = extractApartment(id); // get apartment
+            toAdd.addValue(Data.FAVORITE, 0); // set Favorite to non
+            _picsDB.saveTempPic(id); // save pics
+            apartmentDB.addApartment(toAdd); // save apartment
+            Data.increaseApartmentCounter();
+        }
+        else {
+            int id = _currApartment.getId(); // ged edited apartment id
+            Apartment toAdd = extractApartment(id); // get apartment
+            toAdd.addValue(Data.FAVORITE, _currApartment.getValue(Data.FAVORITE).getIntValue()); // set Favorite to old
+            _picsDB.saveTempPic(id); // save newly added pics
+            apartmentDB.deleteApartment(id); // remove old apartment details.
+            apartmentDB.addApartment(toAdd); // save new apartment.
+        }
         ApartmentListFragment.get_instance().refreshList();
-        Data.increaseApartmentCounter();
         this.finish();
+    }
+
+    protected void onDestroy(){
+        super.onDestroy();
+        _picsDB.removeTempPics();
     }
 
     private void startPicEdit(){
@@ -496,19 +549,29 @@ public class EditApartment extends AppCompatActivity {
 
     private ArrayList<Value> extractVals(){
         ArrayList<Value> ans = new ArrayList<Value>();
-        for(View field: _fieldsWidgets){
-            if(field instanceof EditText){
-                String userInput = ((EditText)field).getText().toString();
-                ans.add(new Value(userInput));
-            } else if(field instanceof CheckBox){
-                boolean userInput = ((CheckBox)field).isChecked();
-                int newInput = 0;
-                if(userInput)
-                    newInput = 1;
-                ans.add(new Value(newInput));
-            } else if(field instanceof Spinner){
-                int userInput = ((Spinner)field).getSelectedItemPosition();
-                ans.add(new Value(userInput));
+        for(int i=0; i<_fieldsRaw.size(); i++){
+            View currView = _fieldsWidgets.get(i);
+            switch(_fieldsRaw.get(i).getType()){
+                case Field.NUMBER:
+                    int num = Integer.parseInt(((EditText) currView).getText().toString());
+                    ans.add(new Value(num));
+                    break;
+                case Field.CHECKBOX:
+                    boolean check = ((CheckBox)currView).isChecked();
+                    int newCheck = 0;
+                    if(check)
+                        newCheck = 1;
+                    ans.add(new Value(newCheck));
+                    break;
+                case Field.MULTISELECT:
+                    int selection = ((Spinner)currView).getSelectedItemPosition();
+                    ans.add(new Value(selection));
+                    break;
+                case Field.PHONE:
+                case Field.TEXT:
+                    String userInput = ((EditText)currView).getText().toString();
+                    ans.add(new Value(userInput));
+                    break;
             }
         }
         return ans;

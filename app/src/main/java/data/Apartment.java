@@ -30,6 +30,10 @@ public class Apartment {
             throw new NullPointerException("Value " + i + " does not exist for this apartment");
     }
 
+    public boolean hasField(int id){
+        return _apartmentDetails.containsKey(id);
+    }
+
     public int getId(){
         return this._id;
     }

@@ -53,10 +53,7 @@ public class Field {
         for(int i=0; i< params.size(); i++){
             Field field = fields.get(i);
             Value param = params.get(i);
-            if(field.getType() == CHECKBOX || field.getType() == MULTISELECT)
-                score = field.calculate(score, param.getIntValue());
-            else if(field.getType() == NUMBER)
-                score = field.calculate(score, Integer.parseInt(param.getStrValue()));
+            score = field.calculate(score, param.getIntValue());;
         }
         return score;
     }
