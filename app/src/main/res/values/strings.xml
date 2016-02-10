@@ -2,4 +2,9 @@
     <string name="app_name">CheckLease</string>
     <string name="db_name">CheckLeaseDB</string>
     <string name="AddApartmentTitle">דירה חדשה</string>
+    <string name="settingsTitle">הגדרות</string>
+    <string name="city">עיר מגורים</string>
+    <string name="share">שתף את הדירות שלי</string>
+    <string name="sort">מיין את הדירות על פי</string>
+
 </resources>
