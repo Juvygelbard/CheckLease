@@ -6,5 +6,8 @@
     <string name="city">עיר מגורים</string>
     <string name="share">שתף את הדירות שלי</string>
     <string name="sort">מיין את הדירות על פי</string>
+    <string name="retrieval">שחזר</string>
+    <string name="retrieval2">דירות אחרונות שנמחקו</string>
+    <string name="deleteAll">מחק את כל הדירות</string>
 
 </resources>
