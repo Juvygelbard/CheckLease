@@ -119,7 +119,7 @@ public class EditApartment extends AppCompatActivity {
         if(!_newApartment){
             title.setText("עריכת דירה");
             _currApartment = ApartmentListFragment._apartments.get(_appIndex);
-            _addressView.setText(_currApartment.getValue(Data.ADDRESS).getStrValue());
+            _addressView.setText(_currApartment.getValue(Data.ADDRESS_STR).getStrValue());
             EditText apNum = (EditText)this.findViewById(R.id.txtApartmentNum);
             if(_currApartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
                 apNum.setText("" + _currApartment.getValue(Data.APARTMENT_NUM).getIntValue());
@@ -128,8 +128,11 @@ public class EditApartment extends AppCompatActivity {
         else
             title.setText("דירה חדשה");
 
-        for(Field field: _fieldsRaw) {
+        ArrayList<Value> params = Field.matchParmasToFields(_currApartment, _fieldsRaw);
+        for(int i=0; i<_fieldsRaw.size(); i++) {
             // check which field we're dealing with
+            Field field = _fieldsRaw.get(i);
+            Value param = params.get(i);
             switch (field.getType()) {
                 case Field.CHECKBOX:
                     LinearLayout checkboxLayout = (LinearLayout)inflater.inflate(R.layout.checkbox_template, null);
@@ -142,11 +145,7 @@ public class EditApartment extends AppCompatActivity {
                             checkbox.callOnClick();
                         }
                     });
-                    if(_newApartment || !_currApartment.hasField(field.getId())) {
-                        checkbox.setChecked(field.getEx2() == 1);
-                    }
-                    else
-                        checkbox.setChecked(_currApartment.getValue(field.getId()).getIntValue() == 1);
+                    checkbox.setChecked(param.getIntValue() == 1);
                     checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -161,10 +160,8 @@ public class EditApartment extends AppCompatActivity {
                     final EditText editnum = (EditText)numberLayout.findViewById(R.id.txtNumber);
                     TextView numberLabel = (TextView)numberLayout.findViewById(R.id.txvNumber);
                     numberLabel.setText(field.getName());
-                    if(_newApartment || !_currApartment.hasField(field.getId()))
-                        editnum.setText("" + field.getEx2());
-                    else
-                        editnum.setText("" + _currApartment.getValue(field.getId()).getIntValue());
+                    editnum.setText("" + param.getIntValue());
+
                     editnum.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -194,10 +191,8 @@ public class EditApartment extends AppCompatActivity {
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, items);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
                     spinner.setAdapter(adapter);
-                    if(_newApartment || !_currApartment.hasField(field.getId()) || _currApartment.getValue(field.getId()).getIntValue() > spinner.getCount())
-                        spinner.setSelection(field.getEx2());
-                    else
-                        spinner.setSelection(_currApartment.getValue(field.getId()).getIntValue());
+                    spinner.setSelection(param.getIntValue());
+
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -215,10 +210,8 @@ public class EditApartment extends AppCompatActivity {
                     ImageButton callbutton = (ImageButton)phoneLayout.findViewById(R.id.callButton);
                     final TextView phoneLabel = (TextView)phoneLayout.findViewById(R.id.txvPhone);
                     phoneLabel.setText(field.getName());
-                    if(_newApartment || !_currApartment.hasField(field.getId()))
-                        editphone.setText(field.getEx1());
-                    else
-                        editphone.setText(_currApartment.getValue(field.getId()).getStrValue());
+                    editphone.setText(param.getStrValue());
+
                     callbutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -235,10 +228,7 @@ public class EditApartment extends AppCompatActivity {
                     final EditText edittext = (EditText)textLayout.findViewById(R.id.txtText);
                     TextView textLabel = (TextView)textLayout.findViewById(R.id.txvText);
                     textLabel.setText(field.getName());
-                    if(_newApartment || !_currApartment.hasField(field.getId()))
-                        edittext.setText(field.getEx1());
-                    else
-                        edittext.setText(_currApartment.getValue(field.getId()).getStrValue());
+                    edittext.setText(param.getStrValue());
                     edittext.setLines(field.getEx2());
                     _fieldsWidgets.add(edittext);
                     mainLayout.addView(textLayout, mainLayout.getChildCount()-3);
@@ -360,21 +350,29 @@ public class EditApartment extends AppCompatActivity {
             apartmentNum = Integer.parseInt(apartmentNumStr);
         String addressStr;
         String addressID;
+        String addressLat;
+        String addressLan;
         if(_address == null) // should only accur if it's an existing apartment!
         {
-            addressStr = _currApartment.getValue(Data.ADDRESS).getStrValue();
+            addressStr = _currApartment.getValue(Data.ADDRESS_STR).getStrValue();
             addressID = _currApartment.getValue(Data.ADDRESS_ID).getStrValue();
+            addressLat = _currApartment.getValue(Data.ADDRESS_LAT).getStrValue();
+            addressLan = _currApartment.getValue(Data.ADDRESS_LAN).getStrValue();
         }
         else{ // should always accur for a new apartment
             addressStr = _address.getAddress().toString().replace(", ישראל", "");
             addressID = _address.getId();
+            addressLat = "" + _address.getLatLng().latitude;
+            addressLan = "" + _address.getLatLng().longitude;
         }
         Apartment toAdd = new Apartment(id);
         ArrayList<Value> vals = extractVals();
         for(int i=0; i<vals.size(); i++) // add values
             toAdd.addValue(_fieldsRaw.get(i).getId(), vals.get(i));
         toAdd.addValue(Data.ADDRESS_ID, addressID);
-        toAdd.addValue(Data.ADDRESS, addressStr);
+        toAdd.addValue(Data.ADDRESS_STR, addressStr);
+        toAdd.addValue(Data.ADDRESS_LAT, addressLat);
+        toAdd.addValue(Data.ADDRESS_LAN, addressLan);
         toAdd.addValue(Data.APARTMENT_NUM, apartmentNum);
         toAdd.addValue(Data.GIVEN_PRICE, _givenPrice);
         toAdd.addValue(Data.CALC_PRICE, _calcPrice);

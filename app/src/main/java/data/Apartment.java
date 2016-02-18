@@ -1,10 +1,7 @@
 package data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import data.Value;
 
 /**
  * Created by user on 30/12/2015.
@@ -58,7 +55,7 @@ public class Apartment {
     }
 
     public String getAddress(){
-        String address = this.getValue(Data.ADDRESS).getStrValue();
+        String address = this.getValue(Data.ADDRESS_STR).getStrValue();
         int apartmentNum = this.getValue(Data.APARTMENT_NUM).getIntValue();
         if(apartmentNum == -1)
             return address;

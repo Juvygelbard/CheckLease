@@ -64,62 +64,20 @@ public class FieldDB {
         return fieldList;
     }
 
-    // TODO: DELETE THIS!
-    public void dummy(){
+
+    public void updateFieldList(ArrayList<Field> newList){
         SQLiteDatabase db = _db.getWritableDatabase();
-        ContentValues neighborhood = new ContentValues();
-        neighborhood.put("id", 3);
-        neighborhood.put("order_i", 1);
-        neighborhood.put("city", "BG");
-        neighborhood.put("name", "שכונה");
-        neighborhood.put("type", Field.MULTISELECT);
-        neighborhood.put("formula", "X+100Y");
-        neighborhood.put("extra1", "א';ב';ג';ד';ו'");
-        neighborhood.put("extra2", 4);
-        db.insert("fields", null, neighborhood);
-
-        ContentValues appartmentSize = new ContentValues();
-        appartmentSize.put("id", 0);
-        appartmentSize.put("order_i", 2);
-        appartmentSize.put("city", "BG");
-        appartmentSize.put("name", "גודל דירה");
-        appartmentSize.put("type", Field.NUMBER);
-        appartmentSize.put("formula", "(1+Y/100)*X");
-        appartmentSize.put("extra1", "");
-        appartmentSize.put("extra2", 100);
-        db.insert("fields", null, appartmentSize);
-
-        ContentValues washingMachine = new ContentValues();
-        washingMachine.put("id", 1);
-        washingMachine.put("order_i", 3);
-        washingMachine.put("city", "BG");
-        washingMachine.put("name", "מכונת כביסה");
-        washingMachine.put("type", Field.CHECKBOX);
-        washingMachine.put("formula", "X+200Y");
-        washingMachine.put("extra1", "");
-        washingMachine.put("extra2", 0);
-        db.insert("fields", null, washingMachine);
-
-        ContentValues phoneRes = new ContentValues();
-        phoneRes.put("id", 2);
-        phoneRes.put("order_i", 4);
-        phoneRes.put("city", "BG");
-        phoneRes.put("name", "טלפון דיירים");
-        phoneRes.put("type", Field.PHONE);
-        phoneRes.put("formula", "X");
-        phoneRes.put("extra1", "");
-        phoneRes.put("extra2", 0);
-        db.insert("fields", null, phoneRes);
-
-        ContentValues desc = new ContentValues();
-        desc.put("id", 4);
-        desc.put("order_i", 5);
-        desc.put("city", "BG");
-        desc.put("name", "תיאור כללי");
-        desc.put("type", Field.TEXT);
-        desc.put("formula", "X");
-        desc.put("extra1", "תאר את הדירה.");
-        desc.put("extra2", 4);
-        db.insert("fields", null, desc);
+        db.delete("fields", null, null);
+        for(Field field: newList){
+            ContentValues item = new ContentValues();
+            item.put("id", field.getId());
+            item.put("order_i", field.getOrder());
+            item.put("name", field.getName());
+            item.put("type", field.getType());
+            item.put("formula", field.getFormula());
+            item.put("extra1", field.getEx1());
+            item.put("extra2", field.getEx2());
+            db.insert("fields", null, item);
+        }
     }
 }

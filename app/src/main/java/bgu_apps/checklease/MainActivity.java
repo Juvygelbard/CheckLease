@@ -1,22 +1,23 @@
 package bgu_apps.checklease;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-
+import com.microsoft.windowsazure.mobileservices.MobileServiceException;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import Fragments.ApartmentListFragment;
 import Fragments.FavouritesFragment;
 import Fragments.SettingsFragment;
 import Fragments.MapFragment;
-
 import adapters.ViewPagerAdapter;
 import data.Data;
+import data.Field;
 import db_handle.ApartmentDB;
+import db_handle.AzureHelper;
 import db_handle.FieldDB;
 import db_handle.DBHelper;
 import db_handle.PicturesDB;
@@ -54,12 +55,30 @@ public class MainActivity extends AppCompatActivity {
         // initiating db:
         DBHelper db = new DBHelper(this.getApplicationContext());
         ApartmentDB.init(db);
-        FieldDB.init(db);
+        FieldDB.init(db); // try
         PicturesDB.init(db);
-
-        FieldDB fieldDB = FieldDB.getInstance();
-        fieldDB.dummy(); // TODO: REMOVE!
+        AzureHelper.init(this.getApplicationContext());
+        final FieldDB fieldDB = FieldDB.getInstance();
         Data.setAllFields(fieldDB.getFieldList());
+
+        AsyncTask<Void, Void, Void> updateFields = new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                // update fields
+                try {
+                    AzureHelper azureDB = AzureHelper.getInstance();
+                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCity());
+                    // fieldDB.updateFieldList(fields);
+                    Data.setAllFields(fields);
+                }
+                catch (MobileServiceException e) {}
+                catch (ExecutionException e) {}
+                catch (InterruptedException e) {}
+
+                return null;
+            }
+        };
+        updateFields.execute();
     }
 
     private void setupTabIcons(){

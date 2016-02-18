@@ -42,8 +42,6 @@ import db_handle.ApartmentDB;
 
 import android.view.MenuItem;
 
-
-
 public class ApartmentListFragment extends Fragment {
 
     private static ApartmentListFragment _instance;
@@ -117,7 +115,7 @@ public class ApartmentListFragment extends Fragment {
                 ApartmentListFragment.this.startActivity(editApartment);
                 return true;
             case R.id.sendApartment:
-                String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".clt";
+                String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".wav";
                 File file = new File(filePath);
                 saveFile(file,_apartments.get(_longClickedApartment).getFeatureIterator());
                 Uri fileUri = Uri.parse(filePath);
@@ -146,6 +144,21 @@ public class ApartmentListFragment extends Fragment {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             try {
+                String header = "RIFF"
+                        + Integer.toString(0)
+                        + "WAVE"
+                        + "fmt " +  Long.toString(16)
+                        + Integer.toString(16)
+                        + Integer.toString(1)
+                        + Integer.toString(2)
+                        + Long.toString(44100)
+                        + Long.toString(88200)
+                        + Integer.toString(2)
+                        + Integer.toString(16)
+                        + "data"
+                        + Integer.toString(0);
+                header = "RIFF";
+                // fos.write(header.getBytes());
                 while (iterator.hasNext()) {
                     HashMap.Entry pair = (HashMap.Entry) iterator.next();
                     Value v = (Value) pair.getValue();
