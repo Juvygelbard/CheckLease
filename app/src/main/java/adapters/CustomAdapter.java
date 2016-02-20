@@ -46,8 +46,6 @@ public class CustomAdapter extends BaseAdapter {
 
         View row = _inflater.inflate(R.layout.row_apartment, parent, false );
 
-
-
         TextView address = (TextView) row.findViewById(R.id.address);
         TextView subTitle = (TextView) row.findViewById(R.id.subtitle);
         ImageView rateImg = (ImageView) row.findViewById(R.id.image_rate);
@@ -55,7 +53,6 @@ public class CustomAdapter extends BaseAdapter {
         favoriteImg.setFocusable(false);
 
         final Apartment curr = _allApartments.get(position);
-
 
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
         subTitle.setText("" + curr.getId()); // todo: complete!

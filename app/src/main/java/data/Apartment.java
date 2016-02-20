@@ -81,4 +81,6 @@ public class Apartment {
     public int getCalcPrice(){
         return _apartmentDetails.get(Data.CALC_PRICE).getIntValue();
     }
+
+
 }

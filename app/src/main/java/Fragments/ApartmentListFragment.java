@@ -21,6 +21,7 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +30,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Collections;
 
 import adapters.CustomAdapter;
 import bgu_apps.checklease.EditApartment;
@@ -72,6 +75,7 @@ public class ApartmentListFragment extends Fragment {
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
         _apartmentDB = ApartmentDB.getInstance();
         _apartments = _apartmentDB.getApartmentList();
+        //TODO: here we need to sort!
         _adapter = new CustomAdapter(_apartments, inflater);
         _lv.setAdapter(_adapter);
         this.registerForContextMenu(_lv);
@@ -182,6 +186,42 @@ public class ApartmentListFragment extends Fragment {
         catch (FileNotFoundException e) {e.printStackTrace();}
     }
 
+// Sort the apartments in the list according to their profitability.
+    public void sortDefault(){
+        Collections.sort(_apartments, new Comparator<Apartment>() {
+                    @Override
+                    public int compare(Apartment lhs, Apartment rhs) {
+                        Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
+                        Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
+                        return l.compareTo(r);
+                    }
+                }
+        );
+    }
+
+// Sort the apartments in the list:first by favourites and then according to their profitability.
+    public void sortAllByFav(){
+        Collections.sort(_apartments, new Comparator<Apartment>() {
+            @Override
+            public int compare(Apartment lhs, Apartment rhs) {
+                Float l = (float) lhs.getGivenPrice() / (float) lhs.getCalcPrice();
+                Float r = (float) rhs.getGivenPrice() / (float) rhs.getCalcPrice();
+                if (lhs.isFavorite() == rhs.isFavorite())
+                    return l.compareTo(r);
+                else {
+                    if (lhs.isFavorite() && !(rhs.isFavorite()))
+                        return 1;
+                    else
+                        return -1;
+                }
+            }
+        });
+    }
+
+    //TODO: decide how we are going to do this...how to show only the favorites (if extra ArrayList or what)
+    public void sortOnlyFav(){
+
+    }
 
 
 //todo: this is not the location of this method! we need to move it when we will preform the getting and reading files of apartments.
@@ -206,7 +246,7 @@ public class ApartmentListFragment extends Fragment {
                         apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
                     }
                     else if(toTheFields[i+1].equals("String")){
-                        String value = toTheFields[1+2];
+                        String value = toTheFields[i+2];
                         apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
                     }
                 }
