@@ -38,6 +38,7 @@ import java.util.Collections;
 import adapters.CustomAdapter;
 import bgu_apps.checklease.EditApartment;
 import bgu_apps.checklease.R;
+import bgu_apps.checklease.ShowApartment;
 import data.Apartment;
 import data.Data;
 import data.Value;
@@ -85,6 +86,14 @@ public class ApartmentListFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 _longClickedApartment = position;
                 return false;
+            }
+        });
+        _lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent showApartment = new Intent(ApartmentListFragment.this.getActivity(), ShowApartment.class);
+                showApartment.putExtra("AppIndex", position);
+                ApartmentListFragment.this.startActivity(showApartment);
             }
         });
 

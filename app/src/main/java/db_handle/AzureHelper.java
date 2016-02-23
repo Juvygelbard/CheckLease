@@ -48,7 +48,7 @@ public class AzureHelper {
         MobileServiceTable<fieldReceiver> table = _db.getTable("fields", fieldReceiver.class);
         for(Field field: fields){
             fieldReceiver toAdd = new fieldReceiver();
-            toAdd._city = Data.getCity();
+            toAdd._city = Data.getCityName();
             toAdd._name = field.getName();
             toAdd._type = field.getType();
             toAdd._f_id = field.getId();

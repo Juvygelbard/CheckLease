@@ -7,7 +7,10 @@ import java.util.ArrayList;
  */
 public class Data {
     private static ArrayList<Field> _allFields;
-    private static String _city = "BG";
+    private static String _cityName = "BG";
+    private static double _cityLat = 31.250919;
+    private static double _cityLan = 34.783916;
+
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
     public static final String LINE_SEPARATOR = String.valueOf((char)178);
@@ -26,7 +29,15 @@ public class Data {
 
     private Data(){}
 
-    public static String getCity(){ return _city; }
+    public static String getCityName(){ return _cityName; }
+
+    public static double getCityLat(){
+        return _cityLat;
+    }
+
+    public static double getCityLan(){
+        return _cityLan;
+    }
 
     public static void setFieldList(ArrayList<Field> fields){
         _allFields = fields;

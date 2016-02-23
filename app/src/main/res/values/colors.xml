@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#125688</color>
-    <color name="textColorPrimary">#125688</color>
+    <color name="textColorPrimary">#3e2723</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#c8e8ff</color>
+    <color name="navigationBarColor">#3e2723</color>
+    <color name="colorAccent">#9ccc65</color>
+    <color name="oragneHouse">#f3b13f</color>
+    <color name="redHouse">#ed5345</color>
 </resources>

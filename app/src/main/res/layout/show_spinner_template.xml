@@ -4,34 +4,21 @@
     android:layout_height="match_parent"
     android:gravity="right"
     android:minHeight="@dimen/field_height">
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:layout_gravity="center_vertical"
-        android:padding="5dp"
-        android:src="@drawable/call"
-        android:id="@+id/callButton" />
-
-    <EditText
+    <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:inputType="phone"
-        android:gravity="center"
-        android:selectAllOnFocus="true"
+        android:textSize="20dp"
+        android:gravity="right"
         android:layout_gravity="center_vertical"
-        android:id="@+id/txtPhone" />
+        android:id="@+id/txvShowSpinner" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:text="שדה"
         android:textSize="20dp"
-        android:layout_gravity="center_vertical"
-        android:textColor="#000000"
-        android:id="@+id/txvPhone" />
-
+        android:id="@+id/txvSpinnerTitle" />
 </LinearLayout>

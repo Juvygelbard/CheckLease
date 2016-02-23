@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="right"
+    android:minHeight="@dimen/field_height">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center_vertical"
+        android:padding="5dp"
+        android:src="@drawable/call"
+        android:id="@+id/callButton" />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="phone"
+        android:gravity="center"
+        android:selectAllOnFocus="true"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/txtPhone" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="שדה"
+        android:textSize="20dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/txvPhone" />
+
+</LinearLayout>

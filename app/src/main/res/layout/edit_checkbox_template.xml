@@ -5,21 +5,20 @@
     android:gravity="right"
     android:minHeight="@dimen/field_height">
 
-        <Spinner
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/sprSpinner" />
-
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:text="שדה"
             android:textSize="20dp"
-            android:textColor="#000000"
-            android:id="@+id/txvSpinner" />
+            android:id="@+id/txvCheckbox"
+            android:paddingRight="5dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp"
+            android:id="@+id/chbCheckbox" />
+
 </LinearLayout>

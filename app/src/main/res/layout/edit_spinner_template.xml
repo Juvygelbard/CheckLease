@@ -4,16 +4,14 @@
     android:layout_height="match_parent"
     android:gravity="right"
     android:minHeight="@dimen/field_height">
-        <EditText
+
+        <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="0"
-            android:inputType="number"
             android:gravity="center"
             android:layout_gravity="center_vertical"
-            android:selectAllOnFocus="true"
-            android:id="@+id/txtNumber" />
+            android:id="@+id/sprSpinner" />
 
         <TextView
             android:layout_width="0dp"
@@ -22,6 +20,5 @@
             android:layout_gravity="center_vertical"
             android:text="שדה"
             android:textSize="20dp"
-            android:textColor="#000000"
-            android:id="@+id/txvNumber" />
+            android:id="@+id/txvSpinner" />
 </LinearLayout>

@@ -135,7 +135,7 @@ public class EditApartment extends AppCompatActivity {
             Value param = params.get(i);
             switch (field.getType()) {
                 case Field.CHECKBOX:
-                    LinearLayout checkboxLayout = (LinearLayout)inflater.inflate(R.layout.checkbox_template, null);
+                    LinearLayout checkboxLayout = (LinearLayout)inflater.inflate(R.layout.edit_checkbox_template, null);
                     final CheckBox checkbox = (CheckBox)checkboxLayout.findViewById(R.id.chbCheckbox);
                     TextView checkboxLabel = (TextView)checkboxLayout.findViewById(R.id.txvCheckbox);
                     checkboxLabel.setText(field.getName());
@@ -156,7 +156,7 @@ public class EditApartment extends AppCompatActivity {
                     mainLayout.addView(checkboxLayout, mainLayout.getChildCount()-3);
                     break;
                 case Field.NUMBER:
-                    LinearLayout numberLayout = (LinearLayout)inflater.inflate(R.layout.number_template, null);
+                    LinearLayout numberLayout = (LinearLayout)inflater.inflate(R.layout.edit_number_template, null);
                     final EditText editnum = (EditText)numberLayout.findViewById(R.id.txtNumber);
                     TextView numberLabel = (TextView)numberLayout.findViewById(R.id.txvNumber);
                     numberLabel.setText(field.getName());
@@ -182,7 +182,7 @@ public class EditApartment extends AppCompatActivity {
                     mainLayout.addView(numberLayout, mainLayout.getChildCount()-3);
                     break;
                 case Field.MULTISELECT:
-                    LinearLayout spinnerLayout = (LinearLayout)inflater.inflate(R.layout.spinner_template, null);
+                    LinearLayout spinnerLayout = (LinearLayout)inflater.inflate(R.layout.edit_spinner_template, null);
                     Spinner spinner = (Spinner)spinnerLayout.findViewById(R.id.sprSpinner);
                     TextView spinnerLabel = (TextView)spinnerLayout.findViewById(R.id.txvSpinner);
                     spinnerLabel.setText(field.getName());
@@ -205,7 +205,7 @@ public class EditApartment extends AppCompatActivity {
                     mainLayout.addView(spinnerLayout, mainLayout.getChildCount()-3);
                     break;
                 case Field.PHONE:
-                    LinearLayout phoneLayout = (LinearLayout)inflater.inflate(R.layout.phone_template, null);
+                    LinearLayout phoneLayout = (LinearLayout)inflater.inflate(R.layout.edit_phone_template, null);
                     final EditText editphone = (EditText)phoneLayout.findViewById(R.id.txtPhone);
                     ImageButton callbutton = (ImageButton)phoneLayout.findViewById(R.id.callButton);
                     final TextView phoneLabel = (TextView)phoneLayout.findViewById(R.id.txvPhone);
@@ -224,7 +224,7 @@ public class EditApartment extends AppCompatActivity {
                     mainLayout.addView(phoneLayout, mainLayout.getChildCount()-3);
                     break;
                 case Field.TEXT:
-                    LinearLayout textLayout = (LinearLayout)inflater.inflate(R.layout.text_template, null);
+                    LinearLayout textLayout = (LinearLayout)inflater.inflate(R.layout.edit_text_template, null);
                     final EditText edittext = (EditText)textLayout.findViewById(R.id.txtText);
                     TextView textLabel = (TextView)textLayout.findViewById(R.id.txvText);
                     textLabel.setText(field.getName());

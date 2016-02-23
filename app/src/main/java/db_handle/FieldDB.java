@@ -39,7 +39,7 @@ public class FieldDB {
         ArrayList<Field> fieldList = new ArrayList<Field>();
         SQLiteDatabase db = _db.getReadableDatabase();
         String col[] = {"id", "name", "type", "formula", "extra1", "extra2"};
-        Cursor curr = db.query("fields", col, "city='" + Data.getCity() + "'", null, null, null, "order_i");
+        Cursor curr = db.query("fields", col, "city='" + Data.getCityName() + "'", null, null, null, "order_i");
 
         if(curr.moveToFirst()){
             int colID = curr.getColumnIndex("id");

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="right"
+    android:minHeight="@dimen/field_height">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/call"
+            android:id="@+id/callPhone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:selectAllOnFocus="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp"
+            android:id="@+id/txvShowPhone" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="שדה"
+        android:textSize="20dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/txvPhoneTitle" />
+
+</LinearLayout>

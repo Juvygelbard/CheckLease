@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 // update fields
                 try {
                     AzureHelper azureDB = AzureHelper.getInstance();
-                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCity());
+                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCityName());
                     // fieldDB.updateFieldList(fields);
                     Data.setAllFields(fields);
                 }
