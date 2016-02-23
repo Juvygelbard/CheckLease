@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -22,11 +24,12 @@ import db_handle.FieldDB;
 import db_handle.DBHelper;
 import db_handle.PicturesDB;
 
-
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private int _currentTab;
+
     private int[] tabIcons = {
             R.drawable.list_gray_hdpi,
             R.drawable.star_full_gray_hdpi,
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        _currentTab = 0;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -51,6 +55,21 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
+            public void onTabSelected(TabLayout.Tab tab){
+                int newTab = tab.getPosition();
+                if(_currentTab == 0 || _currentTab == 1)
+                    if(newTab == 2 || newTab == 3)
+                        super.onTabSelected(tab);
+                    else{
+
+                    }
+                else
+                    if(newTab == 1)
+                        super.onTabSelected(tabLayout.getTabAt(0));
+                _currentTab = newTab;
+            }
+        });
 
         // initiating db:
         DBHelper db = new DBHelper(this.getApplicationContext());
