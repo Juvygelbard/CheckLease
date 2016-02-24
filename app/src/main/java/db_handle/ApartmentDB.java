@@ -43,7 +43,7 @@ public class ApartmentDB {
         HashMap<Integer, Apartment> apartments = new HashMap<Integer, Apartment>();
         SQLiteDatabase db = _db.getReadableDatabase();
         String col[] = {"apartment_id", "field_id", "int_val", "str_val"};
-        Cursor curr = db.query("apartments", col, "city='" + Data.getCityName() + "'", null, null, null, null);
+        Cursor curr = db.query("apartments", col, "city='" + Data.getCityID() + "'", null, null, null, null);
 
         if(curr.moveToFirst()){
             int colApartmentID = curr.getColumnIndex("apartment_id");
@@ -99,7 +99,7 @@ public class ApartmentDB {
             String strVal = val.getStrValue();
 
             ContentValues feature = new ContentValues();
-            feature.put("city", Data.getCityName());
+            feature.put("city", Data.getCityID());
             feature.put("apartment_id", toAdd.getId());
             feature.put("field_id", fieldID);
             feature.put("int_val", intVal);

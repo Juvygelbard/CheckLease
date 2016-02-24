@@ -39,7 +39,7 @@ public class FieldDB {
         ArrayList<Field> fieldList = new ArrayList<Field>();
         SQLiteDatabase db = _db.getReadableDatabase();
         String col[] = {"id", "name", "type", "formula", "extra1", "extra2"};
-        Cursor curr = db.query("fields", col, "city='" + Data.getCityName() + "'", null, null, null, "order_i");
+        Cursor curr = db.query("fields", col, null, null, null, null, "order_i");
 
         if(curr.moveToFirst()){
             int colID = curr.getColumnIndex("id");
@@ -61,9 +61,9 @@ public class FieldDB {
                 curr.moveToNext();
             }
         }
+        db.close();
         return fieldList;
     }
-
 
     public void updateFieldList(ArrayList<Field> newList){
         SQLiteDatabase db = _db.getWritableDatabase();
@@ -79,5 +79,6 @@ public class FieldDB {
             item.put("extra2", field.getEx2());
             db.insert("fields", null, item);
         }
+        db.close();
     }
 }

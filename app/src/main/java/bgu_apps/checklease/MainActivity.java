@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import Fragments.FavouritesFragment;
 import Fragments.SettingsFragment;
 import Fragments.MapFragment;
 import adapters.ViewPagerAdapter;
+import data.City;
 import data.Data;
 import data.Field;
 import db_handle.ApartmentDB;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private int _currentTab;
+    private boolean _showFav;
 
     private int[] tabIcons = {
             R.drawable.list_gray_hdpi,
@@ -47,48 +47,58 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().hide();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        _currentTab = 0;
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+        _showFav = false;
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
-            public void onTabSelected(TabLayout.Tab tab){
-                int newTab = tab.getPosition();
-                if(_currentTab == 0 || _currentTab == 1)
-                    if(newTab == 2 || newTab == 3)
-                        super.onTabSelected(tab);
-                    else{
 
-                    }
-                else
-                    if(newTab == 1)
-                        super.onTabSelected(tabLayout.getTabAt(0));
-                _currentTab = newTab;
-            }
-        });
+        // add fav button.
+//        LinearLayout tabStrip = (LinearLayout)tabLayout.getChildAt(0);
+//        tabStrip.getChildAt(0).setEnabled(false);
+//        ImageButton favButton = new ImageButton(this.getApplicationContext());
+//        favButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//        favButton.setImageResource(R.drawable.star_empty_grey);
+//        favButton.setBackgroundColor(Color.TRANSPARENT);
+//        tabStrip.addView(favButton, 0);
+
+        Data.setIsDataShared(true); // TODO: REMOVE/CHANGE!
+        Data.setCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
 
         // initiating db:
         DBHelper db = new DBHelper(this.getApplicationContext());
         ApartmentDB.init(db);
-        FieldDB.init(db); // try
+        FieldDB.init(db);
         PicturesDB.init(db);
         AzureHelper.init(this.getApplicationContext());
         final FieldDB fieldDB = FieldDB.getInstance();
         Data.setAllFields(fieldDB.getFieldList());
 
-        AsyncTask<Void, Void, Void> updateFields = new AsyncTask<Void, Void, Void>(){
+        ArrayList<City> tempCityList = new ArrayList<City>();
+        tempCityList.add(Data.getCity());
+        Data.setAllCities(tempCityList); // so user won't get an error if citylist is not updated.
+
+        new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... params) {
                 // update fields
                 try {
+                    // update fields
                     AzureHelper azureDB = AzureHelper.getInstance();
-                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCityName());
-                    // fieldDB.updateFieldList(fields);
+                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCityID());
+                    fieldDB.updateFieldList(fields);
                     Data.setAllFields(fields);
+
+                    // get cities
+                    Data.setAllCities(azureDB.getCityList());
+
+//                    azureDB.addCity(new City("חולון","HIT", 32.015833, 34.787384, 12.0f));
+//                    azureDB.addCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
+//                    azureDB.addCity(new City("תל אביב","TA", 32.085300, 34.781768, 12.0f));
+
                 }
                 catch (MobileServiceException e) {}
                 catch (ExecutionException e) {}
@@ -96,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
                 return null;
             }
-        };
-        updateFields.execute();
+        }.execute();
     }
 
     private void setupTabIcons(){

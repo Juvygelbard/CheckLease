@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import android.widget.Toast;
 import Fragments.ApartmentListFragment;
@@ -32,6 +33,7 @@ import data.Data;
 import java.io.File;
 import android.graphics.Color;
 import data.Field;
+import db_handle.AzureHelper;
 import db_handle.PicturesDB;
 import java.util.HashSet;
 import android.view.View;
@@ -393,6 +395,8 @@ public class EditApartment extends AppCompatActivity {
             _picsDB.saveTempPic(id); // save pics
             apartmentDB.addApartment(toAdd); // save apartment
             Data.increaseApartmentCounter();
+            if(Data.isDataShared()) // add apartment to cloud is used agreed
+                saveApartmentToCloud(toAdd);
         }
         else {
             int id = _currApartment.getId(); // ged edited apartment id
@@ -401,9 +405,22 @@ public class EditApartment extends AppCompatActivity {
             _picsDB.saveTempPic(id); // save newly added pics
             apartmentDB.deleteApartment(id); // remove old apartment details.
             apartmentDB.addApartment(toAdd); // save new apartment.
+            if(Data.isDataShared()) // add apartment to cloud is used agreed
+                saveApartmentToCloud(toAdd);
         }
         ApartmentListFragment.get_instance().refreshList();
         this.finish();
+    }
+
+    private void saveApartmentToCloud(final Apartment toAdd){
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                AzureHelper cloud = AzureHelper.getInstance();
+                cloud.addApartment(toAdd);
+                return null;
+            }
+        }.execute();
     }
 
     protected void onDestroy(){

@@ -48,8 +48,7 @@ public class MapFragment extends SupportMapFragment  {
                     }
                 });
 
-                LatLng camLatLan = new LatLng(Data.getCityLat(), Data.getCityLan());
-                CameraPosition cityPos = new CameraPosition.Builder().target(camLatLan).zoom(12.0f).build();
+                CameraPosition cityPos = new CameraPosition.Builder().target(Data.getCityLatLan()).zoom(Data.getCityZoom()).build();
                 _map.moveCamera(CameraUpdateFactory.newCameraPosition(cityPos));
             }
         });
