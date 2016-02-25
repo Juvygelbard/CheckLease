@@ -35,7 +35,7 @@ public class ShowApartment extends AppCompatActivity {
         setContentView(R.layout.activity_show_apartment);
 
         _appIndex = this.getIntent().getIntExtra("AppIndex", 0);
-        _apartment = ApartmentListFragment._apartments.get(_appIndex);
+        _apartment = ApartmentListFragment.getApartmentByIndex(_appIndex);
         _imageGallery = (LinearLayout)this.findViewById(R.id.show_image_gallery);
 
         TextView address = (TextView)this.findViewById(R.id.txvShowAddress);

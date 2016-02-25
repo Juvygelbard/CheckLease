@@ -164,6 +164,7 @@
                     android:layout_gravity="center_vertical"
                     android:selectAllOnFocus="true"
                     android:textSize="30dp"
+                    android:maxLength="5"
                     android:ems="10"
                     android:id="@+id/txtPrice" />
 

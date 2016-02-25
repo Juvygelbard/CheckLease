@@ -21,19 +21,49 @@
         <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- Register to handle email attachments -->
+            <!-- WARNING: Do NOT use android:host="*" for these as they will not work properly -->
             <intent-filter>
+
+                <!-- needed for properly formatted email messages -->
+                <data
+                    android:mimeType="application/checklease"
+                    android:pathPattern=".*\\.clt"
+                    android:scheme="content" />
+                <!-- needed for mangled email messages -->
+                <data
+                    android:mimeType="application/checklease"
+                    android:pathPattern=".*\\.clt"
+                    android:scheme="content" />
+                <!-- needed for mangled email messages -->
+                <data
+                    android:mimeType="application/octet-stream"
+                    android:pathPattern=".*\\.clt"
+                    android:scheme="content" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="file" />
-                <data android:mimeType="*/*" />
-                <data android:pathPattern=".*\\..*\\.clt" />
-                <data android:host="*" />
             </intent-filter>
 
+            <!-- Register to handle file opening -->
+            <intent-filter>
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.clt"
+                    android:scheme="file" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
         <activity android:name=".EditApartment" />
 

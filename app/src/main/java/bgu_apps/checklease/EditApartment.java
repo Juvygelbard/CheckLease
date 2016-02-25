@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 
 import android.widget.Toast;
 import Fragments.ApartmentListFragment;
+import Fragments.YesNoDialogFragment;
 import data.Apartment;
 import data.Value;
 import db_handle.ApartmentDB;
@@ -63,7 +64,7 @@ public class EditApartment extends AppCompatActivity {
 
     private ArrayList<Field> _fieldsRaw;
     private ArrayList<View> _fieldsWidgets;
-    private Apartment _currApartment;
+    private Apartment _apartment;
     private EditText _txtGivenPrice;
     private LinearLayout _addPhotoPlatte;
     private LinearLayout _removePhotoPlatte;
@@ -126,17 +127,17 @@ public class EditApartment extends AppCompatActivity {
         _txtGivenPrice = (EditText)this.findViewById(R.id.txtPrice);
         if(!_newApartment){
             title.setText("עריכת דירה");
-            _currApartment = ApartmentListFragment._apartments.get(_appIndex);
-            _addressView.setText(_currApartment.getValue(Data.ADDRESS_STR).getStrValue());
+            _apartment = ApartmentListFragment.getApartmentByIndex(_appIndex);
+            _addressView.setText(_apartment.getValue(Data.ADDRESS_STR).getStrValue());
             EditText apNum = (EditText)this.findViewById(R.id.txtApartmentNum);
-            if(_currApartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
-                apNum.setText("" + _currApartment.getValue(Data.APARTMENT_NUM).getIntValue());
-            _txtGivenPrice.setText("" + _currApartment.getValue(Data.GIVEN_PRICE).getIntValue());
+            if(_apartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
+                apNum.setText("" + _apartment.getValue(Data.APARTMENT_NUM).getIntValue());
+            _txtGivenPrice.setText("" + _apartment.getValue(Data.GIVEN_PRICE).getIntValue());
         }
         else
             title.setText("דירה חדשה");
 
-        ArrayList<Value> params = Field.matchParmasToFields(_currApartment, _fieldsRaw);
+        ArrayList<Value> params = Field.matchParmasToFields(_apartment, _fieldsRaw);
         for(int i=0; i<_fieldsRaw.size(); i++) {
             // check which field we're dealing with
             Field field = _fieldsRaw.get(i);
@@ -267,7 +268,7 @@ public class EditApartment extends AppCompatActivity {
 
         // create image display
         if(!_newApartment){
-            ArrayList<String> picPathList = _picsDB.getPicturePathList(_currApartment.getId());
+            ArrayList<String> picPathList = _picsDB.getPicturePathList(_apartment.getId());
             for(String path: picPathList){
                 try {
                     Uri imageUri = Uri.parse(path);
@@ -316,29 +317,28 @@ public class EditApartment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // build an 'are you sure?' dialog
-                AlertDialog.Builder askBuilder = new AlertDialog.Builder(EditApartment.this, R.style.MyMaterialTheme);
-                askBuilder.setTitle("האם למחוק את התמונות המסומנות?");
-                askBuilder.setPositiveButton("כן", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) { // delete all selected pics
-                        for (String picUri : _markedUri)
-                            _picsDB.removePic(picUri);
-                        _markedUri.clear();
-                        for (ImageView picView : _markedPics)
-                            _imageGallery.removeView(picView);
-                        _markedPics.clear();
-                        if (_imageGallery.getChildCount() == 0)
-                            stopPicEdit();
-                        dialog.dismiss();
-                    }
-                });
-                askBuilder.setNegativeButton("לא", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                askBuilder.show();
+                YesNoDialogFragment deleteDialog = new YesNoDialogFragment("האם למחוק את התמונות המסומנות?",
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                for (String picUri : _markedUri)
+                                    _picsDB.removePic(picUri);
+                                _markedUri.clear();
+                                for (ImageView picView : _markedPics)
+                                    _imageGallery.removeView(picView);
+                                _markedPics.clear();
+                                if (_imageGallery.getChildCount() == 0)
+                                    stopPicEdit();
+                                dialog.dismiss();
+                            }
+                        },
+                        new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                deleteDialog.show(getSupportFragmentManager(), "מחיקת תמונות");
             }
         });
         backToAdd.setOnClickListener(new View.OnClickListener() {
@@ -362,10 +362,10 @@ public class EditApartment extends AppCompatActivity {
         String addressLan;
         if(_address == null) // should only accur if it's an existing apartment!
         {
-            addressStr = _currApartment.getValue(Data.ADDRESS_STR).getStrValue();
-            addressID = _currApartment.getValue(Data.ADDRESS_ID).getStrValue();
-            addressLat = _currApartment.getValue(Data.ADDRESS_LAT).getStrValue();
-            addressLan = _currApartment.getValue(Data.ADDRESS_LAN).getStrValue();
+            addressStr = _apartment.getValue(Data.ADDRESS_STR).getStrValue();
+            addressID = _apartment.getValue(Data.ADDRESS_ID).getStrValue();
+            addressLat = _apartment.getValue(Data.ADDRESS_LAT).getStrValue();
+            addressLan = _apartment.getValue(Data.ADDRESS_LAN).getStrValue();
         }
         else{ // should always accur for a new apartment
             addressStr = _address.getAddress().toString().replace(", ישראל", "");
@@ -405,9 +405,9 @@ public class EditApartment extends AppCompatActivity {
                 saveApartmentToCloud(toAdd);
         }
         else {
-            int id = _currApartment.getId(); // ged edited apartment id
+            int id = _apartment.getId(); // ged edited apartment id
             Apartment toAdd = extractApartment(id); // get apartment
-            toAdd.addValue(Data.FAVORITE, _currApartment.getValue(Data.FAVORITE).getIntValue()); // set Favorite to old
+            toAdd.addValue(Data.FAVORITE, _apartment.getValue(Data.FAVORITE).getIntValue()); // set Favorite to old
             _picsDB.saveTempPic(id); // save newly added pics
             apartmentDB.deleteApartment(id); // remove old apartment details.
             apartmentDB.addApartment(toAdd); // save new apartment.

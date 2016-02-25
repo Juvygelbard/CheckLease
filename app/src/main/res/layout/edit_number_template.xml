@@ -10,6 +10,7 @@
             android:layout_weight="1"
             android:text="0"
             android:inputType="number"
+            android:maxLength="6"
             android:gravity="center"
             android:layout_gravity="center_vertical"
             android:selectAllOnFocus="true"

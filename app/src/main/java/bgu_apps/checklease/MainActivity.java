@@ -6,17 +6,9 @@ import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
-import android.content.Intent;
-import android.net.Uri;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import Fragments.ApartmentListFragment;
@@ -32,13 +24,14 @@ import db_handle.AzureHelper;
 import db_handle.FieldDB;
 import db_handle.DBHelper;
 import db_handle.PicturesDB;
-
+import android.content.Intent;
 import data.Value;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    public static Intent _intent = null;
     public static ApartmentListFragment _fullListFragment;
     public static ApartmentListFragment _favListFragment;
     public static int _currTab;
@@ -146,11 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 _favListFragment.refreshList();
             }
         }.execute();
-
-//        Intent intent = this.getIntent();
-//        Uri ret = intent.getData();
-//        Toast msg = Toast.makeText(this.getApplicationContext(), getContentResolver().getType(ret), Toast.LENGTH_SHORT);
-//        msg.show();
     }
 
     private void setupTabIcons(){
@@ -174,38 +162,5 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new MapFragment(), "MapFragment");
         adapter.addFragment(new SettingsFragment(), "SettingsFragment");
         viewPager.setAdapter(adapter);
-    }
-
-    public void loadFile(File file) {
-        try {
-            Apartment added = new Apartment(Data.getCurrApartmentCounter());
-            FileInputStream fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String fromFile = br.readLine();
-            while (fromFile != null) {
-                sb.append(fromFile);
-                fromFile = br.readLine();
-            }
-            fromFile = sb.toString();
-            String[] vals = fromFile.split(Data.VAL_SEPARATOR_A);
-            for (int i = 0; i < vals.length; i++) {
-                String[] val = vals[i].split(Data.VAL_SEPARATOR_B);
-                int id = Integer.parseInt(val[0]);
-                String strVal = val[1];
-                int intVal = Integer.parseInt(val[2]);
-                added.addValue(id, new Value(strVal, intVal));
-            }
-            added.setFavorite(false);
-            ApartmentDB.getInstance().addApartment(added);
-            _fullListFragment.refreshList();
-            Toast msg = Toast.makeText(this.getApplicationContext(), "נוספה דירה חדשה!", Toast.LENGTH_SHORT);
-            msg.show();
-        } catch (IOException e) { }
-        catch (IndexOutOfBoundsException e){
-            Toast msg = Toast.makeText(this.getApplicationContext(), "קובץ הדירה אינו חוקי!", Toast.LENGTH_SHORT);
-            msg.show();
-        }
     }
 }
