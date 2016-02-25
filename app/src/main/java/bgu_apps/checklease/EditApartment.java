@@ -49,6 +49,8 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import static bgu_apps.checklease.R.layout.activity_edit_apartment;
 
@@ -102,6 +104,10 @@ public class EditApartment extends AppCompatActivity {
         PlaceAutocompleteFragment _addressView = (PlaceAutocompleteFragment)this.getFragmentManager().findFragmentById(R.id.acfAddress);
         AutocompleteFilter fullAddress = new AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).build();
         _addressView.setFilter(fullAddress);
+        LatLng SW = new LatLng(Data.getCityLatLan().latitude - Data.ADDRESS_RADIUS, Data.getCityLatLan().longitude + Data.ADDRESS_RADIUS);
+        LatLng NE = new LatLng(Data.getCityLatLan().latitude + Data.ADDRESS_RADIUS, Data.getCityLatLan().longitude - Data.ADDRESS_RADIUS);
+        LatLngBounds limits = new LatLngBounds(SW, NE);
+        _addressView.setBoundsBias(limits);
 
         _addressView.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -408,7 +414,8 @@ public class EditApartment extends AppCompatActivity {
             if(Data.isDataShared()) // add apartment to cloud is used agreed
                 saveApartmentToCloud(toAdd);
         }
-        ApartmentListFragment.get_instance().refreshList();
+        MainActivity._fullListFragment.refreshList();
+       MainActivity._favListFragment.refreshList();
         this.finish();
     }
 

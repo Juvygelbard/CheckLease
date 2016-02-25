@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
+
+import bgu_apps.checklease.MainActivity;
 import data.Apartment;
 import bgu_apps.checklease.R;
 import data.Data;
@@ -47,7 +49,6 @@ public class CustomAdapter extends BaseAdapter {
         View row = _inflater.inflate(R.layout.row_apartment, parent, false );
 
         TextView address = (TextView) row.findViewById(R.id.address);
-        TextView subTitle = (TextView) row.findViewById(R.id.subtitle);
         ImageView rateImg = (ImageView) row.findViewById(R.id.image_rate);
         final ImageButton favoriteImg = (ImageButton) row.findViewById(R.id.button_favorite);
         favoriteImg.setFocusable(false);
@@ -55,7 +56,6 @@ public class CustomAdapter extends BaseAdapter {
         final Apartment curr = _allApartments.get(position);
 
         address.setText(curr.getAddress()); // todo: check the option that the address is too long
-        subTitle.setText("" + curr.getId()); // todo: complete!
         int rate = Data.getRate(curr.getCalcPrice(), curr.getGivenPrice());
         // determine color
         switch(rate){
@@ -91,6 +91,9 @@ public class CustomAdapter extends BaseAdapter {
                     curr.setFavorite(true);
                     apartmentDB.setFavorite(curr.getId(), true);
                 }
+                MainActivity._favListFragment.refreshList();
+                if(MainActivity.getCurrTabIndex() == 1)
+                    MainActivity._fullListFragment.refreshList();
             }
         });
 

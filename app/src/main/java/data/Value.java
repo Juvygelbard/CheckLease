@@ -35,12 +35,4 @@ public class Value {
     public String getStrValue(){
         return _strValue;
     }
-
-    public String toString(){
-
-        if(_strValue.equals("NULL"))
-            return "Integer" + Data.LINE_SEPARATOR + _intValue;
-        else
-            return "String" + Data.LINE_SEPARATOR + _strValue;
-    }
 }

@@ -6,15 +6,24 @@ import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
+import android.content.Intent;
+import android.net.Uri;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceException;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import Fragments.ApartmentListFragment;
-import Fragments.FavouritesFragment;
 import Fragments.SettingsFragment;
 import Fragments.MapFragment;
 import adapters.ViewPagerAdapter;
+import data.Apartment;
 import data.City;
 import data.Data;
 import data.Field;
@@ -24,11 +33,15 @@ import db_handle.FieldDB;
 import db_handle.DBHelper;
 import db_handle.PicturesDB;
 
+import data.Value;
+
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private boolean _showFav;
+    public static ApartmentListFragment _fullListFragment;
+    public static ApartmentListFragment _favListFragment;
+    public static int _currTab;
 
     private int[] tabIcons = {
             R.drawable.list_gray_hdpi,
@@ -50,20 +63,16 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-        _showFav = false;
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
-        // add fav button.
-//        LinearLayout tabStrip = (LinearLayout)tabLayout.getChildAt(0);
-//        tabStrip.getChildAt(0).setEnabled(false);
-//        ImageButton favButton = new ImageButton(this.getApplicationContext());
-//        favButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//        favButton.setImageResource(R.drawable.star_empty_grey);
-//        favButton.setBackgroundColor(Color.TRANSPARENT);
-//        tabStrip.addView(favButton, 0);
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
+            public void onTabSelected(TabLayout.Tab tab) {
+                _currTab = tab.getPosition();
+                super.onTabSelected(tab);
+            }
+        });
 
         Data.setIsDataShared(true); // TODO: REMOVE/CHANGE!
         Data.setCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
@@ -86,11 +95,7 @@ public class MainActivity extends AppCompatActivity {
             protected Void doInBackground(Void... params) {
                 // update fields
                 try {
-                    // update fields
                     AzureHelper azureDB = AzureHelper.getInstance();
-                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCityID());
-                    fieldDB.updateFieldList(fields);
-                    Data.setAllFields(fields);
 
                     // get cities
                     Data.setAllCities(azureDB.getCityList());
@@ -99,6 +104,33 @@ public class MainActivity extends AppCompatActivity {
 //                    azureDB.addCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
 //                    azureDB.addCity(new City("תל אביב","TA", 32.085300, 34.781768, 12.0f));
 
+                    // update fields
+                    ArrayList<Field> fields = azureDB.getFieldList(Data.getCityID());
+                    fieldDB.updateFieldList(fields);
+                    Data.setAllFields(fields);
+
+                    // update apartments after fields update
+                    ApartmentDB appDB = ApartmentDB.getInstance();
+
+                    for(Apartment apartment: ApartmentListFragment._apartments){
+                        int id = apartment.getId();
+                        ArrayList<Value> vals = Field.matchParmasToFields(apartment);
+                        Apartment updated = new Apartment(id);
+                        for(int i=0; i<fields.size(); i++){
+                            updated.addValue(fields.get(i).getId(), vals.get(i));
+                        }
+                        updated.addValue(Data.ADDRESS_ID, apartment.getValue(Data.ADDRESS_ID));
+                        updated.addValue(Data.APARTMENT_NUM, apartment.getValue(Data.APARTMENT_NUM));
+                        updated.addValue(Data.ADDRESS_LAT, apartment.getValue(Data.ADDRESS_LAT));
+                        updated.addValue(Data.ADDRESS_LAN, apartment.getValue(Data.ADDRESS_LAN));
+                        updated.addValue(Data.ADDRESS_STR, apartment.getValue(Data.ADDRESS_STR));
+                        updated.addValue(Data.CALC_PRICE, apartment.getValue(Data.CALC_PRICE));
+                        updated.addValue(Data.GIVEN_PRICE, apartment.getValue(Data.GIVEN_PRICE));
+                        updated.addValue(Data.FAVORITE, apartment.getValue(Data.FAVORITE));
+
+                        appDB.deleteApartment(id);
+                        appDB.addApartment(updated);
+                    }
                 }
                 catch (MobileServiceException e) {}
                 catch (ExecutionException e) {}
@@ -106,7 +138,19 @@ public class MainActivity extends AppCompatActivity {
 
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                _fullListFragment.refreshList();
+                _favListFragment.refreshList();
+            }
         }.execute();
+
+//        Intent intent = this.getIntent();
+//        Uri ret = intent.getData();
+//        Toast msg = Toast.makeText(this.getApplicationContext(), getContentResolver().getType(ret), Toast.LENGTH_SHORT);
+//        msg.show();
     }
 
     private void setupTabIcons(){
@@ -116,12 +160,52 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
     }
 
+    public static int getCurrTabIndex(){
+        return _currTab;
+    }
+
     private void setupViewPager(ViewPager viewPager){
-        ViewPagerAdapter adapter= new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ApartmentListFragment(), "ApartmentList");
-        adapter.addFragment(new FavouritesFragment(), "FavouritesFragment");
-        adapter.addFragment(new MapFragment() , "MapFragment");
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        _fullListFragment = new ApartmentListFragment(false);
+        _favListFragment = new ApartmentListFragment(true);
+
+        adapter.addFragment(_fullListFragment, "ApartmentList");
+        adapter.addFragment(_favListFragment, "FavoritesFragment");
+        adapter.addFragment(new MapFragment(), "MapFragment");
         adapter.addFragment(new SettingsFragment(), "SettingsFragment");
         viewPager.setAdapter(adapter);
+    }
+
+    public void loadFile(File file) {
+        try {
+            Apartment added = new Apartment(Data.getCurrApartmentCounter());
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String fromFile = br.readLine();
+            while (fromFile != null) {
+                sb.append(fromFile);
+                fromFile = br.readLine();
+            }
+            fromFile = sb.toString();
+            String[] vals = fromFile.split(Data.VAL_SEPARATOR_A);
+            for (int i = 0; i < vals.length; i++) {
+                String[] val = vals[i].split(Data.VAL_SEPARATOR_B);
+                int id = Integer.parseInt(val[0]);
+                String strVal = val[1];
+                int intVal = Integer.parseInt(val[2]);
+                added.addValue(id, new Value(strVal, intVal));
+            }
+            added.setFavorite(false);
+            ApartmentDB.getInstance().addApartment(added);
+            _fullListFragment.refreshList();
+            Toast msg = Toast.makeText(this.getApplicationContext(), "נוספה דירה חדשה!", Toast.LENGTH_SHORT);
+            msg.show();
+        } catch (IOException e) { }
+        catch (IndexOutOfBoundsException e){
+            Toast msg = Toast.makeText(this.getApplicationContext(), "קובץ הדירה אינו חוקי!", Toast.LENGTH_SHORT);
+            msg.show();
+        }
     }
 }

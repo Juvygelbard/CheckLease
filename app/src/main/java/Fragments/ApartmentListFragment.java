@@ -4,6 +4,7 @@ package Fragments;
  * Created by user on 09/01/2016.
  */
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,8 +21,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,47 +36,63 @@ import java.util.Collections;
 
 import adapters.CustomAdapter;
 import bgu_apps.checklease.EditApartment;
+import bgu_apps.checklease.MainActivity;
 import bgu_apps.checklease.R;
 import bgu_apps.checklease.ShowApartment;
 import data.Apartment;
 import data.Data;
 import data.Value;
 import db_handle.ApartmentDB;
-
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class ApartmentListFragment extends Fragment {
 
-    private static ApartmentListFragment _instance;
     private ListView _lv;
     public static ArrayList<Apartment> _apartments;
-    private static CustomAdapter _adapter;
+    public static ArrayList<Apartment> _apartmentsFavs;
+    private CustomAdapter _adapter;
     private ApartmentDB _apartmentDB;
     int _longClickedApartment;
     String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/apartmentsToSend";
+    private boolean _isFav;
 
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+    public ApartmentListFragment(){
+        if(MainActivity._currTab == 0)
+            _isFav = false;
+        else
+            _isFav = true;
     }
-
-    public static ApartmentListFragment get_instance(){
-        return _instance;
+    public ApartmentListFragment(boolean isFav){
+        _isFav = isFav;
     }
 
     public void refreshList(){
-        _apartments.clear();
-        _apartments.addAll(_apartmentDB.getApartmentList());
+        if(_isFav) {
+            _apartmentsFavs.clear();
+            _apartmentsFavs.addAll(_apartmentDB.getFavoriteList());
+        }
+        else {
+            _apartments.clear();
+            _apartments.addAll(_apartmentDB.getApartmentList());
+        }
         _adapter.notifyDataSetChanged();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View layout = inflater.inflate(R.layout.fragment_apartment_list, container, false);
-        _instance = this;
         _lv = (ListView)layout.findViewById(R.id.ApartmentList);
         _apartmentDB = ApartmentDB.getInstance();
-        _apartments = _apartmentDB.getApartmentList();
+        if(_isFav) {
+            _apartmentsFavs = _apartmentDB.getFavoriteList();
+            _adapter = new CustomAdapter(_apartmentsFavs, inflater);
+        }
+        else {
+            _apartments = _apartmentDB.getApartmentList();
+            _adapter = new CustomAdapter(_apartments, inflater);
+        }
         //TODO: here we need to sort!
-        _adapter = new CustomAdapter(_apartments, inflater);
+
         _lv.setAdapter(_adapter);
         this.registerForContextMenu(_lv);
 
@@ -98,14 +113,19 @@ public class ApartmentListFragment extends Fragment {
         });
 
         FloatingActionButton fab = (FloatingActionButton)layout.findViewById(R.id.add_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), EditApartment.class);
-                addApartment.putExtra("AppIndex", -1);
-                ApartmentListFragment.this.startActivity(addApartment);
-            }
-        });
+        if(!_isFav) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent addApartment = new Intent(ApartmentListFragment.this.getActivity(), EditApartment.class);
+                    addApartment.putExtra("AppIndex", -1);
+                    ApartmentListFragment.this.startActivity(addApartment);
+                }
+            });
+        }
+        else
+            fab.setVisibility(View.GONE);
+
 
         File dir = new File(_pathFiles);
         dir.mkdirs();
@@ -128,7 +148,7 @@ public class ApartmentListFragment extends Fragment {
                 ApartmentListFragment.this.startActivity(editApartment);
                 return true;
             case R.id.sendApartment:
-                String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".wav";
+                String filePath = _pathFiles + "/Apartment_" + _apartments.get(_longClickedApartment).getId() + ".clt";
                 File file = new File(filePath);
                 saveFile(file,_apartments.get(_longClickedApartment).getFeatureIterator());
                 Uri fileUri = Uri.parse(filePath);
@@ -139,6 +159,34 @@ public class ApartmentListFragment extends Fragment {
                 this.getActivity().startActivity(msgIntent);
                 return true;
             case R.id.callApartment:
+                ArrayList<String> options = Data.getPhonefieldList();
+                switch(options.size()){
+                    case 0: // no phone options in list.
+                        Toast msg = Toast.makeText(this.getActivity().getApplicationContext(),"לא קיים מספר טלפון בפרטי הדירה!", Toast.LENGTH_SHORT);
+                        msg.show();
+                        break;
+                    case 1: // only one phone option in list.
+                        int id = Data.getPhonefieldID(options.get(0));
+                        String phone = _apartments.get(_longClickedApartment).getValue(id).getStrValue();
+                        Intent dial = new Intent(Intent.ACTION_DIAL);
+                        dial.setData(Uri.parse("tel:" + phone));
+                        this.startActivity(dial);
+                        break;
+                    default: // more than one phone option in list.
+                        final String[] phoneList = options.toArray(new String[options.size()]);
+                        ListDialogFragment choosePhone = new ListDialogFragment("למי להתקשר?", phoneList, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int id = Data.getPhonefieldID(phoneList[which]);
+                                String phone = _apartments.get(_longClickedApartment).getValue(id).getStrValue();
+                                Intent dial = new Intent(Intent.ACTION_DIAL);
+                                dial.setData(Uri.parse("tel:" + phone));
+                                ApartmentListFragment.this.startActivity(dial);
+                            }
+                        });
+                        choosePhone.show(getFragmentManager(), "רשימת טלפונים");
+                        break;
+                }
                 return true;
             case R.id.deleteApartment:
                 Apartment currApartment = _apartments.get(_longClickedApartment);
@@ -157,42 +205,27 @@ public class ApartmentListFragment extends Fragment {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             try {
-                String header = "RIFF"
-                        + Integer.toString(0)
-                        + "WAVE"
-                        + "fmt " +  Long.toString(16)
-                        + Integer.toString(16)
-                        + Integer.toString(1)
-                        + Integer.toString(2)
-                        + Long.toString(44100)
-                        + Long.toString(88200)
-                        + Integer.toString(2)
-                        + Integer.toString(16)
-                        + "data"
-                        + Integer.toString(0);
-                header = "RIFF";
-                // fos.write(header.getBytes());
                 while (iterator.hasNext()) {
                     HashMap.Entry pair = (HashMap.Entry) iterator.next();
                     Value v = (Value) pair.getValue();
-                    String value = v.toString();
+                    String str_val = v.getStrValue();
+                    String int_val = "" + v.getIntValue();
                     String key = pair.getKey().toString();
                     fos.write(key.getBytes());
-                    fos.write(Data.LINE_SEPARATOR.getBytes());
-                    fos.write(value.getBytes());
-                    fos.write(Data.LINE_SEPARATOR.getBytes());
+                    fos.write(Data.VAL_SEPARATOR_A.getBytes());
+                    fos.write(str_val.getBytes());
+                    fos.write(Data.VAL_SEPARATOR_A.getBytes());
+                    fos.write(int_val.getBytes());
+                    fos.write(Data.VAL_SEPARATOR_B.getBytes());
                 }
             } catch (IOException e) {
-                e.printStackTrace();
             } finally {
                 try {
                     fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) { }
             }
         }
-        catch (FileNotFoundException e) {e.printStackTrace();}
+        catch (FileNotFoundException e) {}
     }
 
 // Sort the apartments in the list according to their profitability.
@@ -231,39 +264,4 @@ public class ApartmentListFragment extends Fragment {
     public void sortOnlyFav(){
 
     }
-
-
-//todo: this is not the location of this method! we need to move it when we will preform the getting and reading files of apartments.
-    public static HashMap<Integer, Value> loadFile(File file){
-        HashMap<Integer, Value> apartmentDetails = new HashMap<Integer, Value>();
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            try {
-                InputStreamReader isr = new InputStreamReader(fis);
-                BufferedReader br = new BufferedReader(isr);
-                StringBuilder sb = new StringBuilder();
-                String fromFile = br.readLine();
-                while (fromFile != null) {
-                    sb.append(fromFile);
-                    fromFile = br.readLine();
-                }
-                fromFile = sb.toString();
-                String[] toTheFields = fromFile.split(Data.LINE_SEPARATOR);
-                for(int i = 0 ; i <= toTheFields.length - 3 ; i = i+3){
-                    if(toTheFields[i+1].equals("Integer")){
-                        int value = Integer.valueOf(toTheFields[i+2]);
-                        apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
-                    }
-                    else if(toTheFields[i+1].equals("String")){
-                        String value = toTheFields[i+2];
-                        apartmentDetails.put(Integer.getInteger(toTheFields[i]) , new Value(value));
-                    }
-                }
-                return apartmentDetails;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            }catch (FileNotFoundException e) {e.printStackTrace();}
-            return apartmentDetails;
-        }
 }

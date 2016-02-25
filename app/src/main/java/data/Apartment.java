@@ -57,10 +57,10 @@ public class Apartment {
     public String getAddress(){
         String address = this.getValue(Data.ADDRESS_STR).getStrValue();
         int apartmentNum = this.getValue(Data.APARTMENT_NUM).getIntValue();
-        if(apartmentNum == -1)
+        if(apartmentNum == 0)
             return address;
         else
-            return address + "/" + apartmentNum;
+            return address + " / דירה " + apartmentNum;
     }
 
     public void setFavorite(boolean fav){

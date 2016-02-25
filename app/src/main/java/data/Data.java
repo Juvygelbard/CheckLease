@@ -3,6 +3,7 @@ package data;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * Created by user on 30/12/2015.
@@ -12,10 +13,14 @@ public class Data {
     private static ArrayList<City> _allCities;
     private static City _city;
     private static boolean _toCloud;
+    private static Hashtable<String, Integer> _phoneFields;
 
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
-    public static final String LINE_SEPARATOR = String.valueOf((char)178);
+    public static final String VAL_SEPARATOR_A = String.valueOf((char)178);
+    public static final String VAL_SEPARATOR_B = String.valueOf((char)179);
+
+    public static final double ADDRESS_RADIUS = 0.35;
 
     public static final int FAVORITE = -1;
     public static final int ADDRESS_ID = -2;
@@ -49,7 +54,21 @@ public class Data {
     }
 
     public static void setAllFields(ArrayList<Field> allFields){
+        // setup phone fields list
+        _phoneFields = new Hashtable<String, Integer>();
+        for(Field curr: allFields){
+            if(curr.getType() == Field.PHONE)
+                _phoneFields.put(curr.getName(), new Integer(curr.getId()));
+        }
         _allFields = allFields;
+    }
+
+    public static ArrayList<String> getPhonefieldList(){
+        return new ArrayList<String>(_phoneFields.keySet());
+    }
+
+    public static int getPhonefieldID(String name){
+        return _phoneFields.get(name).intValue();
     }
 
     public static int getCurrApartmentCounter(){
