@@ -99,19 +99,14 @@ public class SettingsFragment extends Fragment {
                                     ApartmentDB.getInstance().addApartment(Data.getDeletedApartments().get(which));
                                     MainActivity._fullListFragment.refreshList();
                                     MainActivity._favListFragment.refreshList();
-                                    Context context = getContext();
-                                    CharSequence text = "הדירה שוחזרה";
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, text, duration);
+                                    Data.getDeletedApartments().remove(which);
+                                    Toast toast = Toast.makeText(getContext(), "הדירה שוחזרה", Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             });
                             dialogD.show(getFragmentManager(), "שחזור דירות");
                         } else {
-                            Context context = getContext();
-                            CharSequence text = "אין דירות שנמחקו לאחרונה";
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(context, text, duration);
+                            Toast toast = Toast.makeText(getContext(), "אין דירות שנמחקו לאחרונה", Toast.LENGTH_SHORT);
                             toast.show();
                         }
                         break;
@@ -132,18 +127,14 @@ public class SettingsFragment extends Fragment {
                                     }, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Context context = getContext();
-                                    CharSequence text = "רשימת הדירות נותרה ללא שינוי";
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, text, duration);
+                                    Toast toast = Toast.makeText(getContext(), "רשימת הדירות נותרה ללא שינוי", Toast.LENGTH_SHORT);
                                     toast.show();
                                 }
                             });
-                        } else {
-                            Context context = getContext();
-                            CharSequence text = "אין דירות ברשימה";
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(context, text, duration);
+                            dialogE.show(getFragmentManager(),"מחיקת כל הדירות");
+                        }
+                        else {
+                            Toast toast = Toast.makeText(getContext(), "אין דירות ברשימה", Toast.LENGTH_SHORT);
                             toast.show();
                         }
                         break;

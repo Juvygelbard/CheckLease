@@ -211,8 +211,8 @@ public class ApartmentListFragment extends Fragment {
                 return true;
             case R.id.deleteApartment:
                 Apartment currApartment = getApartmentByIndex(_longClickedApartment);
+                Data.getDeletedApartments().add(currApartment);
                 ApartmentDB apartmentDB = ApartmentDB.getInstance();
-                // TODO: Add deleted apartment to deleted list!!!!!!!!!!!!!!!!!!!!!!!!!!
                 apartmentDB.deleteApartment(currApartment.getId());
                 if(MainActivity.getCurrTabIndex() == 0) {
                     _apartments.remove(_longClickedApartment);
