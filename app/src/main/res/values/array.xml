@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Cities">
+        <item>באר שבע</item>
+    </string-array>
+
+    <string-array name="sortApartments">
+        <item>הדירות הכי כדאיות</item>
+        <item>הדירות המועדפות שלי</item>
+        <item>תאריך הוספת הדירות</item>
+        <item>מהמחיר הנמוך לגבוה</item>
+        <item>מהמחיר הגבוה לנמוך</item>
+    </string-array>
+
+    <string-array name="Recover">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>

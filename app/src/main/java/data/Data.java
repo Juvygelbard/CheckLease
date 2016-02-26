@@ -12,8 +12,32 @@ public class Data {
     private static ArrayList<Field> _allFields;
     private static ArrayList<City> _allCities;
     private static City _city;
-    private static boolean _toCloud;
+
     private static Hashtable<String, Integer> _phoneFields;
+
+
+
+
+
+
+
+    private static ArrayList<Apartment> _deletedApartments;
+
+
+
+    private static int _sortBy = Data.SORT_DEF;
+    private static boolean _shareToCloud;
+
+
+
+
+
+
+
+
+
+
+
 
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
@@ -34,7 +58,22 @@ public class Data {
     public static final float LOW_PRICE_BAR = 1.05f;
     public static final float HIGH_PRICE_BAR = 1.3f;
 
+    public static final int SORT_DEF = 0;
+    public static final int SORT_FAV = 1;
+    public static final int SORT_ID = 2;
+    public static final int SORT_PRICE_DOWNTOUP = 3;
+    public static final int SORT_PRICE_UPTODOWN = 4;
+
+
+
+
     private Data(){}
+
+
+    public static ArrayList<Apartment> getDeletedApartments(){ return _deletedApartments; }
+    public static void setDeletedApartments (ArrayList<Apartment> deletedApartments){_deletedApartments = deletedApartments; }
+    public static void setSortBy(int sortBy){ _sortBy = sortBy; }
+    public static int getSortBy(){ return _sortBy; }
 
     public static void setCity(City city){
         _city = city;
@@ -92,11 +131,11 @@ public class Data {
     }
 
     public static boolean isDataShared(){
-        return _toCloud;
+        return _shareToCloud;
     }
 
     public static void setIsDataShared(boolean shared){
-        _toCloud = shared;
+        _shareToCloud = shared;
     }
 
     public static void setAllCities(ArrayList<City> cities){

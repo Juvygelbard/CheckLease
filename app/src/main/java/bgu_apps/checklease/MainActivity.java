@@ -60,12 +60,14 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager){
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             public void onTabSelected(TabLayout.Tab tab) {
                 _currTab = tab.getPosition();
                 super.onTabSelected(tab);
             }
         });
+
+        Data.setDeletedApartments(new ArrayList<Apartment>());
 
         Data.setIsDataShared(true); // TODO: REMOVE/CHANGE!
         Data.setCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));

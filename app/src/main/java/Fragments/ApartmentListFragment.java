@@ -87,6 +87,8 @@ public class ApartmentListFragment extends Fragment {
             _apartments.clear();
             _apartments.addAll(ApartmentDB.getInstance().getApartmentList());
         }
+
+        //TODO SORT!!!! TOR!!!!!!!!!!!!!!!!!!!!!!!
         if(_adapter != null)
             _adapter.notifyDataSetChanged();
     }
@@ -137,7 +139,6 @@ public class ApartmentListFragment extends Fragment {
         else
             fab.setVisibility(View.GONE);
 
-// ask tor about this
         File dir = new File(_pathFiles);
         dir.mkdirs();
 
@@ -211,6 +212,7 @@ public class ApartmentListFragment extends Fragment {
             case R.id.deleteApartment:
                 Apartment currApartment = getApartmentByIndex(_longClickedApartment);
                 ApartmentDB apartmentDB = ApartmentDB.getInstance();
+                // TODO: Add deleted apartment to deleted list!!!!!!!!!!!!!!!!!!!!!!!!!!
                 apartmentDB.deleteApartment(currApartment.getId());
                 if(MainActivity.getCurrTabIndex() == 0) {
                     _apartments.remove(_longClickedApartment);

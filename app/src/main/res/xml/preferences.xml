@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference android:key="city"
+        android:title="בחר עיר מגורים"
+        android:defaultValue="באר שבע"/>
+
+    <ListPreference android:key="sortApartmentsBy"
+        android:title="מיון הדירות ברשימה"
+        android:defaultValue="הדירות הכי כדאיות"/>
+
+    <CheckBoxPreference android:key="shareApartments"
+        android:title="שתף נתוני סטטיסטיקה בלבד"
+        android:defaultValue="false"/>
+
+    <ListPreference android:key="Recover"
+        android:title="שחזור דירות שנמחקו"
+        android:defaultValue="1"
+        android:dialogTitle="בחר כמות דירות אחרונות לשחזור"/>
+
+</PreferenceScreen>
