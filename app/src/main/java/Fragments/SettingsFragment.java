@@ -1,6 +1,5 @@
 package Fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import java.util.ArrayList;
-
-import adapters.SettingsAdapter;
+import adapters.SettingAdapter;
 import bgu_apps.checklease.MainActivity;
 import bgu_apps.checklease.R;
-import data.Apartment;
 import data.Data;
 import db_handle.ApartmentDB;
 
@@ -26,7 +22,7 @@ import db_handle.ApartmentDB;
  */
 public class SettingsFragment extends Fragment {
     private ListView _lv;
-    private static SettingsAdapter _adapter;
+    private static SettingAdapter _adapter;
 
     public SettingsFragment(){}
 
@@ -39,7 +35,7 @@ public class SettingsFragment extends Fragment {
 
         _lv = (ListView) layout.findViewById(R.id.SettingsList);
 
-        _adapter = new SettingsAdapter(inflater);
+        _adapter = new SettingAdapter(inflater);
         _lv.setAdapter(_adapter);
 
         _lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
