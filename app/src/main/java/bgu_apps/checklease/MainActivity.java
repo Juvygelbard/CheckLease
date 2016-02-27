@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static Intent _intent = null;
     public static ApartmentListFragment _fullListFragment;
     public static ApartmentListFragment _favListFragment;
+    public static MapFragment _mapFragment;
     public static int _currTab;
 
     private int[] tabIcons = {
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 _fullListFragment.refreshList();
                 _favListFragment.refreshList();
+                _mapFragment.refreshMap();
             }
         }.execute();
     }
@@ -154,10 +156,11 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         _fullListFragment = new ApartmentListFragment(false);
         _favListFragment = new ApartmentListFragment(true);
+        _mapFragment = new MapFragment();
 
         adapter.addFragment(_fullListFragment, "ApartmentList");
         adapter.addFragment(_favListFragment, "FavoritesFragment");
-        adapter.addFragment(new MapFragment(), "MapFragment");
+        adapter.addFragment(_mapFragment, "MapFragment");
         adapter.addFragment(new SettingsFragment(), "SettingsFragment");
         viewPager.setAdapter(adapter);
     }

@@ -35,7 +35,7 @@ public class MapFragment extends SupportMapFragment  {
             public void onMapReady(GoogleMap googleMap) {
                 _map = googleMap;
 
-                putMarkers();
+                refreshMap();
                 _map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
@@ -48,20 +48,20 @@ public class MapFragment extends SupportMapFragment  {
                     }
                 });
 
-                CameraPosition cityPos = new CameraPosition.Builder().target(Data.getCityLatLan()).zoom(Data.getCityZoom()).build();
-                _map.moveCamera(CameraUpdateFactory.newCameraPosition(cityPos));
+                positionMap();
+                refreshMap();
             }
         });
     }
 
-    public void onResume(){
-        super.onResume();
-
-        if(_map != null)
-            putMarkers();
+    public void positionMap(){
+        CameraPosition cityPos = new CameraPosition.Builder().target(Data.getCityLatLan()).zoom(Data.getCityZoom()).build();
+        _map.moveCamera(CameraUpdateFactory.newCameraPosition(cityPos));
     }
 
-    private void putMarkers(){
+    public void refreshMap(){
+        if(_map == null)
+            return;
         _map.clear();
         for(int i=0; i<ApartmentListFragment._apartments.size(); i++){
             Apartment curr = ApartmentListFragment._apartments.get(i);

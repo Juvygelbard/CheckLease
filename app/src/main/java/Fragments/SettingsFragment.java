@@ -48,8 +48,8 @@ public class SettingsFragment extends Fragment {
                         int curr_city_index = 0;
                         for (int i = 0; i < cityNames.length; i++) {
                             City curr = Data.getAllCities().get(i);
-                            cityNames[i] = curr.get_name();
-                            if(curr.get_id() == Data.getCityID())
+                            cityNames[i] = curr.getName();
+                            if(curr.getID().equals(Data.getCityID()))
                                 curr_city_index = i;
                         }
                         ListDialogFragment dialogA = new ListDialogFragment("בחר עיר", cityNames, new DialogInterface.OnClickListener() {
@@ -103,6 +103,7 @@ public class SettingsFragment extends Fragment {
                                     ApartmentDB.getInstance().addApartment(Data.getDeletedApartments().get(which));
                                     MainActivity._fullListFragment.refreshList();
                                     MainActivity._favListFragment.refreshList();
+                                    MainActivity._mapFragment.refreshMap();
                                     Data.getDeletedApartments().remove(which);
                                     Toast toast = Toast.makeText(getContext(), "הדירה שוחזרה", Toast.LENGTH_SHORT);
                                     toast.show();
@@ -122,9 +123,10 @@ public class SettingsFragment extends Fragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             Data.getDeletedApartments().addAll(ApartmentListFragment._apartments);
-                                            ApartmentDB.getInstance().deleteAll();
+                                            ApartmentDB.getInstance().deleteAll(Data.getCityID());
                                             MainActivity._fullListFragment.refreshList();
                                             MainActivity._favListFragment.refreshList();
+                                            MainActivity._mapFragment.refreshMap();
                                             Toast toast = Toast.makeText(getContext(), "כל הדירות שברשימה נמחקו", Toast.LENGTH_SHORT);
                                             toast.show();
                                         }

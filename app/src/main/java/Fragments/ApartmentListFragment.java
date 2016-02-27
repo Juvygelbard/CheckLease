@@ -55,12 +55,7 @@ public class ApartmentListFragment extends Fragment {
     String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Checklease";
     private boolean _isFav;
 
-    public ApartmentListFragment(){
-        if(MainActivity._currTab == 0)
-            _isFav = false;
-        else
-            _isFav = true;
-    }
+    public ApartmentListFragment(){}
 
     public ApartmentListFragment(boolean isFav){
         _isFav = isFav;
@@ -217,10 +212,12 @@ public class ApartmentListFragment extends Fragment {
                 if(MainActivity.getCurrTabIndex() == 0) {
                     _apartments.remove(_longClickedApartment);
                     MainActivity._favListFragment.refreshList();
+                    MainActivity._mapFragment.refreshMap();
                 }
                 else {
                     _apartmentsFavs.remove(_longClickedApartment);
                     MainActivity._fullListFragment.refreshList();
+                    MainActivity._mapFragment.refreshMap();
                 }
                 if(_adapter != null)
                     _adapter.notifyDataSetChanged();
@@ -318,6 +315,7 @@ public class ApartmentListFragment extends Fragment {
             added.setFavorite(false);
             ApartmentDB.getInstance().addApartment(added);
             MainActivity._fullListFragment.refreshList();
+            MainActivity._mapFragment.refreshMap();
             Toast msg = Toast.makeText(this.getActivity().getApplicationContext(), "נוספה דירה חדשה!", Toast.LENGTH_SHORT);
             msg.show();
             Data.increaseApartmentCounter();
