@@ -154,10 +154,10 @@ public class ApartmentListFragment extends Fragment {
     }
 
     public static Apartment getApartmentByIndex(int index){
-        if(MainActivity.getCurrTabIndex()==0)
-            return _apartments.get(index);
-        else
+        if(MainActivity.getCurrTabIndex() == 1)
             return _apartmentsFavs.get(index);
+        else
+            return _apartments.get(index);
     }
 
     public boolean onContextItemSelected(MenuItem item) {

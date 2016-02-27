@@ -80,7 +80,7 @@ public class Field {
                         if(apartment.getValue(id).getIntValue() < currField.getEx1().split(";").length)
                             ans.add(new Value(apartment.getValue(id)));
                         else
-                            ans.add(new Value(currField.getEx2())); // should not happen, bu in case there was a change in select options
+                            ans.add(new Value(currField.getEx2())); // should not happen, but in case there was a change in select options
                         break;
                     case Field.CHECKBOX:
                         ans.add(new Value(apartment.getValue(id)));

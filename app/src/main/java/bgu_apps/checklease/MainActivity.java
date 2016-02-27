@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     // get cities
                     Data.setAllCities(azureDB.getCityList());
 
-//                    azureDB.addCity(new City("חולון","HIT", 32.015833, 34.787384, 12.0f));
-//                    azureDB.addCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
-//                    azureDB.addCity(new City("תל אביב","TA", 32.085300, 34.781768, 12.0f));
-
                     // update fields
                     ArrayList<Field> fields = azureDB.getFieldList(Data.getCityID());
                     fieldDB.updateFieldList(fields);

@@ -1,7 +1,6 @@
 package bgu_apps.checklease;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -130,7 +129,7 @@ public class EditApartment extends AppCompatActivity {
             _apartment = ApartmentListFragment.getApartmentByIndex(_appIndex);
             _addressView.setText(_apartment.getValue(Data.ADDRESS_STR).getStrValue());
             EditText apNum = (EditText)this.findViewById(R.id.txtApartmentNum);
-            if(_apartment.getValue(Data.APARTMENT_NUM).getIntValue() != -1)
+            if(_apartment.getValue(Data.APARTMENT_NUM).getIntValue() != 0)
                 apNum.setText("" + _apartment.getValue(Data.APARTMENT_NUM).getIntValue());
             _txtGivenPrice.setText("" + _apartment.getValue(Data.GIVEN_PRICE).getIntValue());
         }
@@ -353,7 +352,7 @@ public class EditApartment extends AppCompatActivity {
     public Apartment extractApartment(int id){
         EditText apartmentNumView = (EditText)this.findViewById(R.id.txtApartmentNum);
         String apartmentNumStr = apartmentNumView.getText().toString();
-        int apartmentNum = -1;
+        int apartmentNum = 0;
         if(!apartmentNumStr.equals(""))
             apartmentNum = Integer.parseInt(apartmentNumStr);
         String addressStr;
@@ -456,17 +455,17 @@ public class EditApartment extends AppCompatActivity {
         _addPhotoPlatte.setVisibility(View.VISIBLE);
     }
 
-    private Bitmap scaleImage(Bitmap org){
-        int newHeight = 200;
-        int newWidth = (int)(((float)newHeight / (float)org.getHeight()) * (float)org.getWidth());
-        Bitmap scaledImage = Bitmap.createScaledBitmap(org, newWidth, newHeight, false);
+    private Bitmap scaleImage(Bitmap org, int newHeight){
+        int inDp = (int) ((float)this.getResources().getDisplayMetrics().density * newHeight);
+        int newWidth = (int)(((float)inDp / (float)org.getHeight()) * (float)org.getWidth());
+        Bitmap scaledImage = Bitmap.createScaledBitmap(org, newWidth, inDp, false);
         return scaledImage;
     }
 
     private void addImageToDisplay(final Uri linkedFile) throws IOException {
         // get bitmap and scale it
         final Bitmap image = MediaStore.Images.Media.getBitmap(EditApartment.this.getContentResolver(), linkedFile);
-        Bitmap scaledImage = scaleImage(image);
+        Bitmap scaledImage = scaleImage(image, 132);
         // add imageview and logic
         final ImageView img = new ImageView(this.getApplicationContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -529,7 +528,7 @@ public class EditApartment extends AppCompatActivity {
             } catch (IOException e) {}
         } else if(requestCode == GALLERY && resultCode == RESULT_OK && data != null && data.getData() != null){ // from gallery
             try {
-                Uri imageUri = data.getData();;
+                Uri imageUri = data.getData();
                 addImageToDisplay(imageUri);
                 _picsDB.addTempPic(imageUri.toString());
             } catch (IOException e) {/* file not found */}

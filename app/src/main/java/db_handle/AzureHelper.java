@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import data.Field;
 import data.Value;
 
-
 /**
  * Created by Juvy on 05/02/2016.
  */
