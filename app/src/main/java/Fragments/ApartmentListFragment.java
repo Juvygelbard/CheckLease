@@ -55,18 +55,6 @@ public class ApartmentListFragment extends Fragment {
     String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Checklease";
     private boolean _isFav;
 
-<<<<<<< HEAD
-    public ApartmentListFragment(){
-        if(MainActivity._currTab == 0)
-            _isFav = false;
-        else
-            _isFav = true;
-    }
-// change
-=======
-    public ApartmentListFragment(){}
-
->>>>>>> origin/master
     public ApartmentListFragment(boolean isFav){
         _isFav = isFav;
     }
@@ -93,7 +81,7 @@ public class ApartmentListFragment extends Fragment {
             _apartments.addAll(ApartmentDB.getInstance().getApartmentList());
         }
 
-        sort();
+
 
         if(_adapter != null)
             _adapter.notifyDataSetChanged();
@@ -105,15 +93,13 @@ public class ApartmentListFragment extends Fragment {
         if(_isFav) {
             _apartmentsFavs = ApartmentDB.getInstance().getFavoriteList();
             _adapter = new CustomAdapter(_apartmentsFavs, inflater);
-            //  sort(_apartmentsFavs);
+            sort(_apartmentsFavs);
         }
         else {
             _apartments = ApartmentDB.getInstance().getApartmentList();
             _adapter = new CustomAdapter(_apartments, inflater);
-            //sort(_apartments);
+            sort(_apartments);
         }
-
-        sort();
 
         _lv.setAdapter(_adapter);
         this.registerForContextMenu(_lv);
@@ -271,31 +257,31 @@ public class ApartmentListFragment extends Fragment {
 
 
     //sort the apartments according the preferences.
-    public void sort(){
+    public void sort(ArrayList<Apartment> listToSort){
         switch (Data.getSortBy()){
             case (Data.SORT_DEF):
-                sortDefault();
+                sortDefault(listToSort);
                 break;
             case (Data.SORT_FAV):
-                sortAllByFav();
+                sortAllByFav(listToSort);
                 break;
             case (Data.SORT_ID):
-                sortAllByDate();
+                sortAllByDate(listToSort);
                 break;
             case (Data.SORT_PRICE_DOWNTOUP):
-                sortByPriceLow();
+                sortByPriceLow(listToSort);
                 break;
             case (Data.SORT_PRICE_UPTODOWN):
-                sortByPriceHigh();
+                sortByPriceHigh(listToSort);
                 break;
             default:
-                sortDefault();
+                sortDefault(listToSort);
                 break;
         }
     }
 // Sort the apartments in the list according to their profitability.
-    public void sortDefault(){
-        Collections.sort(_apartments, new Comparator<Apartment>() {
+    public void sortDefault(ArrayList<Apartment> listToSort){
+        Collections.sort(listToSort, new Comparator<Apartment>() {
                     @Override
                     public int compare(Apartment lhs, Apartment rhs) {
                         Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
@@ -307,8 +293,8 @@ public class ApartmentListFragment extends Fragment {
     }
 
 // Sort the apartments in the list:first by favourites and then according to their profitability.
-    public void sortAllByFav(){
-        Collections.sort(_apartments, new Comparator<Apartment>() {
+    public void sortAllByFav(ArrayList<Apartment> listToSort){
+        Collections.sort(listToSort, new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
                 Float l = (float) lhs.getGivenPrice() / (float) lhs.getCalcPrice();
@@ -326,8 +312,8 @@ public class ApartmentListFragment extends Fragment {
     }
 
     //sort the apartments in the list by their ID (the order their were added)
-    public void sortAllByDate(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
+    public void sortAllByDate(ArrayList<Apartment> listToSort){
+        Collections.sort(listToSort , new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
                 if(lhs.getId() < rhs.getId())
@@ -339,8 +325,8 @@ public class ApartmentListFragment extends Fragment {
     }
 
     //sort the apartments from the low price to the high. if the prices are equal sort by profitability.
-    public void sortByPriceLow(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
+    public void sortByPriceLow(ArrayList<Apartment> listToSort){
+        Collections.sort(listToSort , new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
                 if(lhs.getGivenPrice() < rhs.getGivenPrice())
@@ -357,8 +343,8 @@ public class ApartmentListFragment extends Fragment {
     }
 
     //sort the apartments from the high price to the low. if the prices are equal sort by profitability.
-    public void sortByPriceHigh(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
+    public void sortByPriceHigh(ArrayList<Apartment> listToSort){
+        Collections.sort(listToSort , new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
                 if(lhs.getGivenPrice() < rhs.getGivenPrice())
