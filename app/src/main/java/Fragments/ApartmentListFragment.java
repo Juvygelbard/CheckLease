@@ -61,7 +61,7 @@ public class ApartmentListFragment extends Fragment {
         else
             _isFav = true;
     }
-
+// change
     public ApartmentListFragment(boolean isFav){
         _isFav = isFav;
     }
@@ -100,11 +100,15 @@ public class ApartmentListFragment extends Fragment {
         if(_isFav) {
             _apartmentsFavs = ApartmentDB.getInstance().getFavoriteList();
             _adapter = new CustomAdapter(_apartmentsFavs, inflater);
+               //  sort(_apartmentsFavs);
         }
         else {
             _apartments = ApartmentDB.getInstance().getApartmentList();
             _adapter = new CustomAdapter(_apartments, inflater);
+            //sort(_apartments);
         }
+
+        sort();
 
         _lv.setAdapter(_adapter);
         this.registerForContextMenu(_lv);
