@@ -100,7 +100,7 @@ public class ApartmentListFragment extends Fragment {
         if(_isFav) {
             _apartmentsFavs = ApartmentDB.getInstance().getFavoriteList();
             _adapter = new CustomAdapter(_apartmentsFavs, inflater);
-            //  sort(_apartmentsFavs);
+                //  sort(_apartmentsFavs);
         }
         else {
             _apartments = ApartmentDB.getInstance().getApartmentList();
