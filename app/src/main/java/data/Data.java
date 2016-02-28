@@ -72,7 +72,9 @@ public class Data {
 
     public static ArrayList<Apartment> getDeletedApartments(){ return _deletedApartments; }
     public static void setDeletedApartments (ArrayList<Apartment> deletedApartments){_deletedApartments = deletedApartments; }
+
     public static void setSortBy(int sortBy){ _sortBy = sortBy; }
+
     public static int getSortBy(){ return _sortBy; }
 
     public static void setCity(City city){
