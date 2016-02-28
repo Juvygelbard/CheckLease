@@ -55,13 +55,8 @@ public class ApartmentListFragment extends Fragment {
     String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Checklease";
     private boolean _isFav;
 
-    public ApartmentListFragment(){
-        if(MainActivity._currTab == 0)
-            _isFav = false;
-        else
-            _isFav = true;
-    }
-// change
+    public ApartmentListFragment(){}
+
     public ApartmentListFragment(boolean isFav){
         _isFav = isFav;
     }
@@ -88,8 +83,7 @@ public class ApartmentListFragment extends Fragment {
             _apartments.addAll(ApartmentDB.getInstance().getApartmentList());
         }
 
-        sort();
-
+        //TODO SORT!!!! TOR!!!!!!!!!!!!!!!!!!!!!!!
         if(_adapter != null)
             _adapter.notifyDataSetChanged();
     }
@@ -100,15 +94,12 @@ public class ApartmentListFragment extends Fragment {
         if(_isFav) {
             _apartmentsFavs = ApartmentDB.getInstance().getFavoriteList();
             _adapter = new CustomAdapter(_apartmentsFavs, inflater);
-            //  sort(_apartmentsFavs);
         }
         else {
             _apartments = ApartmentDB.getInstance().getApartmentList();
             _adapter = new CustomAdapter(_apartments, inflater);
-            //sort(_apartments);
         }
-
-        sort();
+        //TODO: here we need to sort!
 
         _lv.setAdapter(_adapter);
         this.registerForContextMenu(_lv);
@@ -158,10 +149,10 @@ public class ApartmentListFragment extends Fragment {
     }
 
     public static Apartment getApartmentByIndex(int index){
-        if(MainActivity.getCurrTabIndex()==0)
-            return _apartments.get(index);
-        else
+        if(MainActivity.getCurrTabIndex() == 1)
             return _apartmentsFavs.get(index);
+        else
+            return _apartments.get(index);
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -221,10 +212,12 @@ public class ApartmentListFragment extends Fragment {
                 if(MainActivity.getCurrTabIndex() == 0) {
                     _apartments.remove(_longClickedApartment);
                     MainActivity._favListFragment.refreshList();
+                    MainActivity._mapFragment.refreshMap();
                 }
                 else {
                     _apartmentsFavs.remove(_longClickedApartment);
                     MainActivity._fullListFragment.refreshList();
+                    MainActivity._mapFragment.refreshMap();
                 }
                 if(_adapter != null)
                     _adapter.notifyDataSetChanged();
@@ -261,31 +254,6 @@ public class ApartmentListFragment extends Fragment {
         catch (FileNotFoundException e) {}
     }
 
-
-
-    //sort the apartments according the preferences.
-    public void sort(){
-        switch (Data.getSortBy()){
-            case (Data.SORT_DEF):
-                sortDefault();
-                break;
-            case (Data.SORT_FAV):
-                sortAllByFav();
-                break;
-            case (Data.SORT_ID):
-                sortAllByDate();
-                break;
-            case (Data.SORT_PRICE_DOWNTOUP):
-                sortByPriceLow();
-                break;
-            case (Data.SORT_PRICE_UPTODOWN):
-                sortByPriceHigh();
-                break;
-            default:
-                sortDefault();
-                break;
-        }
-    }
 // Sort the apartments in the list according to their profitability.
     public void sortDefault(){
         Collections.sort(_apartments, new Comparator<Apartment>() {
@@ -318,53 +286,9 @@ public class ApartmentListFragment extends Fragment {
         });
     }
 
-    //sort the apartments in the list by their ID (the order their were added)
-    public void sortAllByDate(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
-            @Override
-            public int compare(Apartment lhs, Apartment rhs) {
-                if(lhs.getId() < rhs.getId())
-                    return -1;
-                else
-                    return 1;
-            }
-        });
-    }
+    //TODO: decide how we are going to do this...how to show only the favorites (if extra ArrayList or what)
+    public void sortOnlyFav(){
 
-    //sort the apartments from the low price to the high. if the prices are equal sort by profitability.
-    public void sortByPriceLow(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
-            @Override
-            public int compare(Apartment lhs, Apartment rhs) {
-                if(lhs.getGivenPrice() < rhs.getGivenPrice())
-                    return 1;
-                else if (lhs.getGivenPrice() > rhs.getGivenPrice())
-                    return -1;
-                else{
-                    Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
-                    Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
-                    return l.compareTo(r);
-                }
-            }
-        });
-    }
-
-    //sort the apartments from the high price to the low. if the prices are equal sort by profitability.
-    public void sortByPriceHigh(){
-        Collections.sort(_apartments , new Comparator<Apartment>() {
-            @Override
-            public int compare(Apartment lhs, Apartment rhs) {
-                if(lhs.getGivenPrice() < rhs.getGivenPrice())
-                    return -1;
-                else if (lhs.getGivenPrice() > rhs.getGivenPrice())
-                    return 1;
-                else{
-                    Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
-                    Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
-                    return l.compareTo(r);
-                }
-            }
-        });
     }
 
     private void loadFile(File file) {
@@ -391,6 +315,7 @@ public class ApartmentListFragment extends Fragment {
             added.setFavorite(false);
             ApartmentDB.getInstance().addApartment(added);
             MainActivity._fullListFragment.refreshList();
+            MainActivity._mapFragment.refreshMap();
             Toast msg = Toast.makeText(this.getActivity().getApplicationContext(), "נוספה דירה חדשה!", Toast.LENGTH_SHORT);
             msg.show();
             Data.increaseApartmentCounter();

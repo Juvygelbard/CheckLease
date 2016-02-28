@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import data.Field;
 import data.Value;
 
-
 /**
  * Created by Juvy on 05/02/2016.
  */
@@ -64,8 +63,8 @@ public class AzureHelper {
     public void addCity(City city){
         MobileServiceTable<cityReceiver> table = _db.getTable("cities", cityReceiver.class);
         cityReceiver toAdd = new cityReceiver();
-        toAdd._city_id = city.get_id();
-        toAdd._city_name = city.get_name();
+        toAdd._city_id = city.getID();
+        toAdd._city_name = city.getName();
         toAdd._lat = city.getLatLan().latitude;
         toAdd._lan = city.getLatLan().longitude;
         toAdd._zoom = city.getZoom();

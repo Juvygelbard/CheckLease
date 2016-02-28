@@ -14,6 +14,7 @@ import android.widget.Toast;
 import adapters.SettingAdapter;
 import bgu_apps.checklease.MainActivity;
 import bgu_apps.checklease.R;
+import data.City;
 import data.Data;
 import db_handle.ApartmentDB;
 
@@ -44,15 +45,21 @@ public class SettingsFragment extends Fragment {
                 switch (position) {
                     case 0: {
                         String[] cityNames = new String[Data.getAllCities().size()];
-                        for (int i = 0; i < cityNames.length; i++)
-                            cityNames[i] = Data.getAllCities().get(i).get_name();
+                        int curr_city_index = 0;
+                        for (int i = 0; i < cityNames.length; i++) {
+                            City curr = Data.getAllCities().get(i);
+                            cityNames[i] = curr.getName();
+                            if(curr.getID().equals(Data.getCityID()))
+                                curr_city_index = i;
+                        }
                         ListDialogFragment dialogA = new ListDialogFragment("בחר עיר", cityNames, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Data.setCity(Data.getAllCities().get(which));
                                 //TODO: sherd PREFRENCES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                dialog.dismiss();
                             }
-                        });
+                        }, curr_city_index);
                         dialogA.show(getFragmentManager(), "בחירת עיר");
                         break;
                     }
@@ -62,8 +69,9 @@ public class SettingsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Data.setSortBy(which);
+                                dialog.dismiss();
                             }
-                        });
+                        }, Data.getSortBy());
                         dialogB.show(getFragmentManager(), "מיון הדירות");
                         break;
                     }
@@ -95,6 +103,7 @@ public class SettingsFragment extends Fragment {
                                     ApartmentDB.getInstance().addApartment(Data.getDeletedApartments().get(which));
                                     MainActivity._fullListFragment.refreshList();
                                     MainActivity._favListFragment.refreshList();
+                                    MainActivity._mapFragment.refreshMap();
                                     Data.getDeletedApartments().remove(which);
                                     Toast toast = Toast.makeText(getContext(), "הדירה שוחזרה", Toast.LENGTH_SHORT);
                                     toast.show();
@@ -114,9 +123,10 @@ public class SettingsFragment extends Fragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             Data.getDeletedApartments().addAll(ApartmentListFragment._apartments);
-                                            ApartmentDB.getInstance().deleteAll();
+                                            ApartmentDB.getInstance().deleteAll(Data.getCityID());
                                             MainActivity._fullListFragment.refreshList();
                                             MainActivity._favListFragment.refreshList();
+                                            MainActivity._mapFragment.refreshMap();
                                             Toast toast = Toast.makeText(getContext(), "כל הדירות שברשימה נמחקו", Toast.LENGTH_SHORT);
                                             toast.show();
                                         }
@@ -127,9 +137,8 @@ public class SettingsFragment extends Fragment {
                                     toast.show();
                                 }
                             });
-                            dialogE.show(getFragmentManager(),"מחיקת כל הדירות");
-                        }
-                        else {
+                            dialogE.show(getFragmentManager(), "מחיקת כל הדירות");
+                        } else {
                             Toast toast = Toast.makeText(getContext(), "אין דירות ברשימה", Toast.LENGTH_SHORT);
                             toast.show();
                         }
@@ -139,8 +148,6 @@ public class SettingsFragment extends Fragment {
                 }
             }
         });
-
-
         return layout;
     }
 

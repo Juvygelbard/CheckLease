@@ -20,11 +20,11 @@ public class City {
         _zoom =  zoom;
     }
 
-    public String get_name(){
+    public String getName(){
         return _name;
     }
 
-    public String get_id(){
+    public String getID(){
         return _id;
     }
 

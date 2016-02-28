@@ -94,6 +94,7 @@ public class CustomAdapter extends BaseAdapter {
                 MainActivity._favListFragment.refreshList();
                 if(MainActivity.getCurrTabIndex() == 1)
                     MainActivity._fullListFragment.refreshList();
+                MainActivity._mapFragment.refreshMap();
             }
         });
 

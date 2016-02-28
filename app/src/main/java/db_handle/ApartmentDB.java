@@ -82,7 +82,7 @@ public class ApartmentDB {
         ArrayList<Apartment> raw = this.getApartmentList();
         ArrayList<Apartment> filtered = new ArrayList<Apartment>();
         for(Apartment curr: raw)
-            if(curr.getValue(Data.FAVORITE).getIntValue() == 1)
+            if(curr.hasField(Data.FAVORITE) && curr.getValue(Data.FAVORITE).getIntValue() == 1)
                 filtered.add(curr);
         return filtered;
     }
@@ -123,8 +123,8 @@ public class ApartmentDB {
         db.delete("apartments", "apartment_id=" + apartmentID, null);
     }
 
-    public void deleteAll(){
+    public void deleteAll(String city){
         SQLiteDatabase db = _db.getWritableDatabase();
-        db.delete("apartments", null, null);
+        db.delete("apartments", "city='" + city + "'", null);
     }
 }

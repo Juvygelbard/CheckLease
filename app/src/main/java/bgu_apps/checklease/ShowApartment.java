@@ -148,17 +148,17 @@ public class ShowApartment extends AppCompatActivity {
         finish();
     }
 
-    private Bitmap scaleImage(Bitmap org){
-        int newHeight = 200;
-        int newWidth = (int)(((float)newHeight / (float)org.getHeight()) * (float)org.getWidth());
-        Bitmap scaledImage = Bitmap.createScaledBitmap(org, newWidth, newHeight, false);
+    private Bitmap scaleImage(Bitmap org, int newHeight){
+        int inDp = (int) ((float)this.getResources().getDisplayMetrics().density * newHeight);
+        int newWidth = (int)(((float)inDp / (float)org.getHeight()) * (float)org.getWidth());
+        Bitmap scaledImage = Bitmap.createScaledBitmap(org, newWidth, inDp, false);
         return scaledImage;
     }
 
     private void addImageToDisplay(final Uri linkedFile) throws IOException {
         // get bitmap and scale it
         final Bitmap image = MediaStore.Images.Media.getBitmap(ShowApartment.this.getContentResolver(), linkedFile);
-        Bitmap scaledImage = scaleImage(image);
+        Bitmap scaledImage = scaleImage(image, 132);
         // add imageview and logic
         final ImageView img = new ImageView(this.getApplicationContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

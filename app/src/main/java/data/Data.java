@@ -80,8 +80,8 @@ public class Data {
     public static void setCity(City city){
         _city = city;
     }
-    public static String getCityName(){return _city.get_name(); }
-    public static String getCityID(){ return _city.get_id(); }
+    public static String getCityName(){return _city.getName(); }
+    public static String getCityID(){ return _city.getID(); }
     public static LatLng getCityLatLan(){ return _city.getLatLan(); }
     public static float getCityZoom(){ return _city.getZoom(); }
     public static City getCity(){ return _city; }

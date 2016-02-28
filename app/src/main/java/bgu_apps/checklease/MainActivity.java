@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static Intent _intent = null;
     public static ApartmentListFragment _fullListFragment;
     public static ApartmentListFragment _favListFragment;
+    public static MapFragment _mapFragment;
     public static int _currTab;
 
     private int[] tabIcons = {
@@ -95,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     // get cities
                     Data.setAllCities(azureDB.getCityList());
 
-//                    azureDB.addCity(new City("חולון","HIT", 32.015833, 34.787384, 12.0f));
-//                    azureDB.addCity(new City("באר שבע","BG", 31.250919, 34.783916, 12.0f));
-//                    azureDB.addCity(new City("תל אביב","TA", 32.085300, 34.781768, 12.0f));
-
                     // update fields
                     ArrayList<Field> fields = azureDB.getFieldList(Data.getCityID());
                     fieldDB.updateFieldList(fields);
@@ -139,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 _fullListFragment.refreshList();
                 _favListFragment.refreshList();
+                _mapFragment.refreshMap();
             }
         }.execute();
     }
@@ -158,10 +156,11 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         _fullListFragment = new ApartmentListFragment(false);
         _favListFragment = new ApartmentListFragment(true);
+        _mapFragment = new MapFragment();
 
         adapter.addFragment(_fullListFragment, "ApartmentList");
         adapter.addFragment(_favListFragment, "FavoritesFragment");
-        adapter.addFragment(new MapFragment(), "MapFragment");
+        adapter.addFragment(_mapFragment, "MapFragment");
         adapter.addFragment(new SettingsFragment(), "SettingsFragment");
         viewPager.setAdapter(adapter);
     }
