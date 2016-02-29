@@ -67,15 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onTabSelected(tab);
             }
         });
-
+        Data.initSharedPreferences(getSharedPreferences("SETTINGS", 0));
         Data.setDeletedApartments(new ArrayList<Apartment>());
-
-        Data.setIsDataShared(true); // TODO: REMOVE/CHANGE!
-        Data.setCity(new City("באר שבע", "BG", 31.250919, 34.783916, 12.0f));
-
-        Data.initSharedPreferences(getSharedPreferences("SETTINGS",0));
-
-
 
         // initiating db:
         DBHelper db = new DBHelper(this.getApplicationContext());

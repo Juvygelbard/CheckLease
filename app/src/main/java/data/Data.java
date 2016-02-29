@@ -64,19 +64,20 @@ public class Data {
         boolean isFirstTime = settings.getBoolean("isFirstTime", true);
         if(isFirstTime){
             _editor.putInt("sortBy", SORT_DEF);
-            _sortBy = SORT_DEF;
-            _editor.putString("currCity", _allCities.get(0).getID());
-            _city = _allCities.get(0);
+            _editor.putString("currCity", "BG");
+            _city = new City("באר שבע", "BG", 31.250919, 34.783916, 12.0f);
             _editor.putBoolean("isDataShared" , false);
-            _shareToCloud = false;
             _editor.putBoolean("isFirstTime", false);
             _editor.commit();
         }
-        else{
-            _sortBy = _settings.getInt("sortBy", SORT_DEF);
-            _city = findCityByID(_allCities, _settings.getString("currCity", _allCities.get(0).getID()));
-            _shareToCloud = _settings.getBoolean("isDataShared", false);
-        }
+        _sortBy = _settings.getInt("sortBy", SORT_DEF);
+        String cityID = _settings.getString("currCityID", "BG");
+        String cityName = _settings.getString("currCityName", "באר שבע");
+        double lat = Double.parseDouble(_settings.getString("currCityLAT", "31.250919"));
+        double lan = Double.parseDouble(_settings.getString("currCityLAN", "34.783916"));
+        float zoom = _settings.getFloat("currCityZoom", 12.0f);
+        _city = new City(cityName, cityID, lat, lan, zoom);
+        _shareToCloud = _settings.getBoolean("isDataShared", false);
     }
 
     public static City findCityByID(ArrayList<City> allCities, String id){
@@ -95,13 +96,19 @@ public class Data {
     public static void setSortBy(int sortBy){
         _sortBy = sortBy;
         _editor.putInt("sortBy", sortBy);
+        _editor.commit();
     }
 
     public static int getSortBy(){ return _sortBy; }
 
     public static void setCity(City city){
         _city = city;
-        _editor.putString("currCity", city.getID());
+        _editor.putString("currCityID", city.getID());
+        _editor.putString("currCityName", city.getName());
+        _editor.putString("currCityLAT", "" + city.getLatLan().latitude);
+        _editor.putString("currCityLAN", "" + city.getLatLan().longitude);
+        _editor.putFloat("currCityZoom", city.getZoom());
+        _editor.commit();
     }
     public static String getCityName(){return _city.getName(); }
     public static String getCityID(){ return _city.getID(); }
@@ -161,7 +168,8 @@ public class Data {
 
     public static void setIsDataShared(boolean shared){
         _shareToCloud = shared;
-        _editor.putBoolean("isDataShared", shared);
+        _editor.putBoolean("isDataShared", _shareToCloud);
+        _editor.commit();
     }
 
     public static void setAllCities(ArrayList<City> cities){

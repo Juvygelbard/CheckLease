@@ -17,6 +17,7 @@ import bgu_apps.checklease.R;
 import data.City;
 import data.Data;
 import db_handle.ApartmentDB;
+import db_handle.FieldDB;
 
 /**
  * Created by user on 09/01/2016.
@@ -55,8 +56,8 @@ public class SettingsFragment extends Fragment {
                         ListDialogFragment dialogA = new ListDialogFragment("בחר עיר", cityNames, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
                                 Data.setCity(Data.getAllCities().get(which));
-                                //TODO: sherd PREFRENCES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                 dialog.dismiss();
                             }
                         }, curr_city_index);
