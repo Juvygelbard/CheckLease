@@ -1,9 +1,14 @@
 package data;
 
+import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by user on 30/12/2015.
@@ -15,29 +20,10 @@ public class Data {
 
     private static Hashtable<String, Integer> _phoneFields;
 
-
-
-
-
-
-
     private static ArrayList<Apartment> _deletedApartments;
 
-
-
-    private static int _sortBy = Data.SORT_DEF;
+    private static int _sortBy;
     private static boolean _shareToCloud;
-
-
-
-
-
-
-
-
-
-
-
 
     private static int _apartmentCounter = 0; // TODO: get current count from properties.
 
@@ -66,19 +52,56 @@ public class Data {
 
 
 
+    private static SharedPreferences _settings;
+    private static SharedPreferences.Editor _editor;
+
 
     private Data(){}
+
+    public static void initSharedPreferences(SharedPreferences settings){
+        _settings = settings;
+        _editor = _settings.edit();
+        boolean isFirstTime = settings.getBoolean("isFirstTime", true);
+        if(isFirstTime){
+            _editor.putInt("sortBy", SORT_DEF);
+            _sortBy = SORT_DEF;
+            _editor.putString("currCity", _allCities.get(0).getID());
+            _city = _allCities.get(0);
+            _editor.putBoolean("isDataShared" , false);
+            _shareToCloud = false;
+            _editor.putBoolean("isFirstTime", false);
+            _editor.commit();
+        }
+        else{
+            _sortBy = _settings.getInt("sortBy", SORT_DEF);
+            _city = findCityByID(_allCities, _settings.getString("currCity", _allCities.get(0).getID()));
+            _shareToCloud = _settings.getBoolean("isDataShared", false);
+        }
+    }
+
+    public static City findCityByID(ArrayList<City> allCities, String id){
+        for (int i = 0 ; i < allCities.size() ; i++){
+            if(allCities.get(i).getID().equals(id))
+                return allCities.get(i);
+        }
+        return allCities.get(0);
+    }
+
 
 
     public static ArrayList<Apartment> getDeletedApartments(){ return _deletedApartments; }
     public static void setDeletedApartments (ArrayList<Apartment> deletedApartments){_deletedApartments = deletedApartments; }
 
-    public static void setSortBy(int sortBy){ _sortBy = sortBy; }
+    public static void setSortBy(int sortBy){
+        _sortBy = sortBy;
+        _editor.putInt("sortBy", sortBy);
+    }
 
     public static int getSortBy(){ return _sortBy; }
 
     public static void setCity(City city){
         _city = city;
+        _editor.putString("currCity", city.getID());
     }
     public static String getCityName(){return _city.getName(); }
     public static String getCityID(){ return _city.getID(); }
@@ -138,6 +161,7 @@ public class Data {
 
     public static void setIsDataShared(boolean shared){
         _shareToCloud = shared;
+        _editor.putBoolean("isDataShared", shared);
     }
 
     public static void setAllCities(ArrayList<City> cities){

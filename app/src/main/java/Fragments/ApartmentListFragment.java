@@ -75,10 +75,12 @@ public class ApartmentListFragment extends Fragment {
         if(_isFav) {
             _apartmentsFavs.clear();
             _apartmentsFavs.addAll(ApartmentDB.getInstance().getFavoriteList());
+            sort(_apartmentsFavs);
         }
         else {
             _apartments.clear();
             _apartments.addAll(ApartmentDB.getInstance().getApartmentList());
+            sort(_apartments);
         }
 
 
