@@ -284,8 +284,14 @@ public class ApartmentListFragment extends Fragment {
         Collections.sort(listToSort, new Comparator<Apartment>() {
                     @Override
                     public int compare(Apartment lhs, Apartment rhs) {
-                        Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
-                        Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
+                        int lCalcPrice = lhs.getCalcPrice();
+                        int rCalcPrice = rhs.getCalcPrice();
+                        if(lCalcPrice == 0)
+                            lCalcPrice = 1;
+                        if(rCalcPrice == 0)
+                            rCalcPrice = 1;
+                        Float l = (float) lhs.getGivenPrice()/ (float) lCalcPrice;
+                        Float r = (float) rhs.getGivenPrice()/ (float) rCalcPrice;
                         return l.compareTo(r);
                     }
                 }
@@ -301,8 +307,15 @@ public class ApartmentListFragment extends Fragment {
                     return -1;
                 else if (!(lhs.isFavorite()) && (rhs.isFavorite()))
                     return 1;
-                Float l = (float) lhs.getGivenPrice() / (float) lhs.getCalcPrice();
-                Float r = (float) rhs.getGivenPrice() / (float) rhs.getCalcPrice();
+                int lCalcPrice = lhs.getCalcPrice();
+                int rCalcPrice = rhs.getCalcPrice();
+                if(lCalcPrice == 0)
+                    lCalcPrice = 1;
+                if(rCalcPrice == 0)
+                    rCalcPrice = 1;
+                Float l = (float) lhs.getGivenPrice() / (float) lCalcPrice;
+                Float r = (float) rhs.getGivenPrice() / (float) rCalcPrice;
+
                 return l.compareTo(r);
             }
         });
@@ -326,11 +339,12 @@ public class ApartmentListFragment extends Fragment {
         Collections.sort(listToSort , new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
-                if(lhs.getGivenPrice() > rhs.getGivenPrice())
+                if (lhs.getGivenPrice() > rhs.getGivenPrice())
                     return 1;
                 else if (lhs.getGivenPrice() < rhs.getGivenPrice())
                     return -1;
                 else{
+
                     Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
                     Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
                     return l.compareTo(r);
@@ -349,8 +363,14 @@ public class ApartmentListFragment extends Fragment {
                 else if (lhs.getGivenPrice() > rhs.getGivenPrice())
                     return -1;
                 else{
-                    Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
-                    Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();
+                    int lCalcPrice = lhs.getCalcPrice();
+                    int rCalcPrice = rhs.getCalcPrice();
+                    if(lCalcPrice == 0)
+                        lCalcPrice = 1;
+                    if(rCalcPrice == 0)
+                        rCalcPrice = 1;
+                    Float l = (float) lhs.getGivenPrice()/ (float) lCalcPrice;
+                    Float r = (float) rhs.getGivenPrice()/ (float) rCalcPrice;
                     return l.compareTo(r);
                 }
             }
