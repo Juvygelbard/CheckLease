@@ -55,7 +55,7 @@ public class CustomAdapter extends BaseAdapter {
 
         final Apartment curr = _allApartments.get(position);
 
-        address.setText(curr.getAddress()); // todo: check the option that the address is too long
+        address.setText(curr.getAddress());
         int rate = Data.getRate(curr.getCalcPrice(), curr.getGivenPrice());
         // determine color
         switch(rate){

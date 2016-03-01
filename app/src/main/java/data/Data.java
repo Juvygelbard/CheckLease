@@ -25,7 +25,7 @@ public class Data {
     private static int _sortBy;
     private static boolean _shareToCloud;
 
-    private static int _apartmentCounter = 0; // TODO: get current count from properties.
+    private static int _apartmentCounter;
 
     public static final String VAL_SEPARATOR_A = String.valueOf((char)178);
     public static final String VAL_SEPARATOR_B = String.valueOf((char)179);
@@ -50,11 +50,8 @@ public class Data {
     public static final int SORT_PRICE_DOWNTOUP = 3;
     public static final int SORT_PRICE_UPTODOWN = 4;
 
-
-
     private static SharedPreferences _settings;
     private static SharedPreferences.Editor _editor;
-
 
     private Data(){}
 
