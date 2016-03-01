@@ -92,7 +92,7 @@ public class CustomAdapter extends BaseAdapter {
                     apartmentDB.setFavorite(curr.getId(), true);
                 }
                 MainActivity._favListFragment.refreshList();
-                if(MainActivity.getCurrTabIndex() == 1)
+                if(MainActivity.getCurrTabIndex() == 1 || Data.getSortBy() == Data.SORT_FAV);
                     MainActivity._fullListFragment.refreshList();
                 MainActivity._mapFragment.refreshMap();
             }

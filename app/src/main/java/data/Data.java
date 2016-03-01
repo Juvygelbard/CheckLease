@@ -68,6 +68,7 @@ public class Data {
             _city = new City("באר שבע", "BG", 31.250919, 34.783916, 12.0f);
             _editor.putBoolean("isDataShared" , false);
             _editor.putBoolean("isFirstTime", false);
+            _editor.putInt("apartmentCounter", 0);
             _editor.commit();
         }
         _sortBy = _settings.getInt("sortBy", SORT_DEF);
@@ -78,6 +79,7 @@ public class Data {
         float zoom = _settings.getFloat("currCityZoom", 12.0f);
         _city = new City(cityName, cityID, lat, lan, zoom);
         _shareToCloud = _settings.getBoolean("isDataShared", false);
+        _apartmentCounter = _settings.getInt("apartmentCounter", 0);
     }
 
     public static City findCityByID(ArrayList<City> allCities, String id){
@@ -148,6 +150,8 @@ public class Data {
 
     public static void increaseApartmentCounter(){
         _apartmentCounter++;
+        _editor.putInt("apartmentCounter", _apartmentCounter);
+        _editor.commit();
     }
 
     public static int getRate(int calcPrice, int givenPrice){

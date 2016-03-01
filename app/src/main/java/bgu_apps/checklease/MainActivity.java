@@ -25,7 +25,6 @@ import db_handle.FieldDB;
 import db_handle.DBHelper;
 import db_handle.PicturesDB;
 import android.content.Intent;
-import data.Value;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
@@ -99,27 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     Data.setAllFields(fields);
 
                     // update apartments after fields update
-                    ApartmentDB appDB = ApartmentDB.getInstance();
-
-                    for(Apartment apartment: ApartmentListFragment._apartments){
-                        int id = apartment.getId();
-                        ArrayList<Value> vals = Field.matchParmasToFields(apartment);
-                        Apartment updated = new Apartment(id);
-                        for(int i=0; i<fields.size(); i++){
-                            updated.addValue(fields.get(i).getId(), vals.get(i));
-                        }
-                        updated.addValue(Data.ADDRESS_ID, apartment.getValue(Data.ADDRESS_ID));
-                        updated.addValue(Data.APARTMENT_NUM, apartment.getValue(Data.APARTMENT_NUM));
-                        updated.addValue(Data.ADDRESS_LAT, apartment.getValue(Data.ADDRESS_LAT));
-                        updated.addValue(Data.ADDRESS_LAN, apartment.getValue(Data.ADDRESS_LAN));
-                        updated.addValue(Data.ADDRESS_STR, apartment.getValue(Data.ADDRESS_STR));
-                        updated.addValue(Data.CALC_PRICE, apartment.getValue(Data.CALC_PRICE));
-                        updated.addValue(Data.GIVEN_PRICE, apartment.getValue(Data.GIVEN_PRICE));
-                        updated.addValue(Data.FAVORITE, apartment.getValue(Data.FAVORITE));
-
-                        appDB.deleteApartment(id);
-                        appDB.addApartment(updated);
-                    }
+                    ApartmentListFragment.reCalcApartmentList(fields);
                 }
                 catch (MobileServiceException e) {}
                 catch (ExecutionException e) {}

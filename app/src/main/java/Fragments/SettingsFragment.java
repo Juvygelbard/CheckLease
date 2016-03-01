@@ -9,14 +9,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.os.AsyncTask;
 
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceException;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import adapters.SettingAdapter;
 import bgu_apps.checklease.MainActivity;
 import bgu_apps.checklease.R;
 import data.City;
 import data.Data;
+import data.Field;
 import db_handle.ApartmentDB;
+import db_handle.AzureHelper;
 import db_handle.FieldDB;
 
 /**
@@ -50,15 +57,52 @@ public class SettingsFragment extends Fragment {
                         for (int i = 0; i < cityNames.length; i++) {
                             City curr = Data.getAllCities().get(i);
                             cityNames[i] = curr.getName();
-                            if(curr.getID().equals(Data.getCityID()))
+                            if (curr.getID().equals(Data.getCityID()))
                                 curr_city_index = i;
                         }
                         ListDialogFragment dialogA = new ListDialogFragment("בחר עיר", cityNames, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                                Data.setCity(Data.getAllCities().get(which));
+                                final City city = Data.getAllCities().get(which);
                                 dialog.dismiss();
+                                new AsyncTask<Void, Void, Boolean>() {
+                                    protected void onPreExecute() {
+                                        Toast before = Toast.makeText(getContext(), "מעדכן נתוני עיר...", Toast.LENGTH_SHORT);
+                                        before.show();
+                                    }
+
+                                    @Override
+                                    protected Boolean doInBackground(Void... params) {
+                                        try {
+                                            // update fields
+                                            ArrayList<Field> fields = AzureHelper.getInstance().getFieldList(city.getID());
+                                            FieldDB.getInstance().updateFieldList(fields);
+                                            Data.setAllFields(fields);
+                                            // update apartments after fields update
+                                            ApartmentListFragment.reCalcApartmentList(fields);
+                                            // refresh view
+                                            MainActivity._fullListFragment.refreshList();
+                                            MainActivity._favListFragment.refreshList();
+                                            // set the new city
+                                            Data.setCity(city);
+                                            return true;
+
+                                        } catch (MobileServiceException | ExecutionException | InterruptedException e) {
+                                            return false;
+                                        }
+                                    }
+
+                                    protected void onPostExecute(Boolean result) {
+                                        if (result) {
+                                            Toast after = Toast.makeText(getContext(), "העיר עודכנה בהצלחה.", Toast.LENGTH_SHORT);
+                                            after.show();
+                                        } else {
+                                            Toast error = Toast.makeText(getContext(), "אין גישה לנתוני העיר. אנא נסה שוב מאוחר יותר.", Toast.LENGTH_SHORT);
+                                            error.show();
+                                        }
+                                    }
+
+                                }.execute();
                             }
                         }, curr_city_index);
                         dialogA.show(getFragmentManager(), "בחירת עיר");
