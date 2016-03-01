@@ -297,16 +297,13 @@ public class ApartmentListFragment extends Fragment {
         Collections.sort(listToSort, new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
+                if (lhs.isFavorite() && !(rhs.isFavorite()))
+                    return -1;
+                else if (!(lhs.isFavorite()) && (rhs.isFavorite()))
+                    return 1;
                 Float l = (float) lhs.getGivenPrice() / (float) lhs.getCalcPrice();
                 Float r = (float) rhs.getGivenPrice() / (float) rhs.getCalcPrice();
-                if (lhs.isFavorite() == rhs.isFavorite())
-                    return l.compareTo(r);
-                else {
-                    if (lhs.isFavorite() && !(rhs.isFavorite()))
-                        return 1;
-                    else
-                        return -1;
-                }
+                return l.compareTo(r);
             }
         });
     }
@@ -329,9 +326,9 @@ public class ApartmentListFragment extends Fragment {
         Collections.sort(listToSort , new Comparator<Apartment>() {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
-                if(lhs.getGivenPrice() < rhs.getGivenPrice())
+                if(lhs.getGivenPrice() > rhs.getGivenPrice())
                     return 1;
-                else if (lhs.getGivenPrice() > rhs.getGivenPrice())
+                else if (lhs.getGivenPrice() < rhs.getGivenPrice())
                     return -1;
                 else{
                     Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
@@ -348,9 +345,9 @@ public class ApartmentListFragment extends Fragment {
             @Override
             public int compare(Apartment lhs, Apartment rhs) {
                 if(lhs.getGivenPrice() < rhs.getGivenPrice())
-                    return -1;
-                else if (lhs.getGivenPrice() > rhs.getGivenPrice())
                     return 1;
+                else if (lhs.getGivenPrice() > rhs.getGivenPrice())
+                    return -1;
                 else{
                     Float l = (float) lhs.getGivenPrice()/ (float) lhs.getCalcPrice();
                     Float r = (float) rhs.getGivenPrice()/ (float) rhs.getCalcPrice();

@@ -41,11 +41,9 @@ public class AzureHelper {
     public ArrayList<Field> getFieldList(String city) throws MobileServiceException, ExecutionException, InterruptedException {
         MobileServiceTable<fieldReceiver> table = _db.getTable("fields", fieldReceiver.class);
         ArrayList<Field> ans = new ArrayList<Field>();
-        ArrayList<fieldReceiver> raw = null;
-        raw = table.where().field("city").eq(city).execute().get();
+        ArrayList<fieldReceiver> raw = table.where().field("city").eq(city).and().field("deleted").eq(false).execute().get();
         for(fieldReceiver curr: raw)
             ans.add(curr.generateField());
-
         return ans;
     }
 
@@ -185,32 +183,5 @@ public class AzureHelper {
             ans.setOrder(_order);
             return ans;
         }
-    }
-
-    // TODO: DELETE THIS!
-    public void dummy(){
-        ArrayList<Field> fields = new ArrayList<Field>();
-
-        Field neighborhood = new Field(3, "שכונה", Field.MULTISELECT, "א';ב';ג';ד';ו'", 4, "X+100Y");
-        neighborhood.setOrder(1);
-        fields.add(neighborhood);
-
-        Field appartmentSize = new Field(0, "גודל דירה", Field.NUMBER, "", 100, "(1+Y/100)*X");
-        appartmentSize.setOrder(2);
-        fields.add(appartmentSize);
-
-        Field washingMachine = new Field(1, "מכונת כביסה", Field.CHECKBOX, "", 0, "X+200Y");
-        washingMachine.setOrder(3);
-        fields.add(washingMachine);
-
-        Field phoneRes = new Field(2, "טלפון דיירים", Field.PHONE, "", 0, "X");
-        phoneRes.setOrder(4);
-        fields.add(phoneRes);
-
-        Field desc = new Field(4, "תיאור כללי", Field.TEXT, "תאר את הדירה.", 4, "X");
-        desc.setOrder(5);
-        fields.add(desc);
-
-        addFields(fields);
     }
 }
