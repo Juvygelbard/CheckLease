@@ -2,6 +2,7 @@ package db_handle;
 
 import com.microsoft.windowsazure.mobileservices.*;
 import com.microsoft.windowsazure.mobileservices.table.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.table.query.QueryOrder;
 
 import android.content.Context;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class AzureHelper {
     public ArrayList<Field> getFieldList(String city) throws MobileServiceException, ExecutionException, InterruptedException {
         MobileServiceTable<fieldReceiver> table = _db.getTable("fields", fieldReceiver.class);
         ArrayList<Field> ans = new ArrayList<Field>();
-        ArrayList<fieldReceiver> raw = table.where().field("city").eq(city).and().field("deleted").eq(false).execute().get();
+        ArrayList<fieldReceiver> raw = table.where().field("city").eq(city).and().field("deleted").eq(false).orderBy("order_i", QueryOrder.Ascending).execute().get();
         for(fieldReceiver curr: raw)
             ans.add(curr.generateField());
         return ans;

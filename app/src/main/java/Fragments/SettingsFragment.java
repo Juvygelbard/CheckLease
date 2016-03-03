@@ -78,11 +78,12 @@ public class SettingsFragment extends Fragment {
                                             ArrayList<Field> fields = AzureHelper.getInstance().getFieldList(city.getID());
                                             FieldDB.getInstance().updateFieldList(fields);
                                             Data.setAllFields(fields);
-                                            // update apartments after fields update
-                                            ApartmentListFragment.reCalcApartmentList(fields);
                                             // refresh view
                                             MainActivity._fullListFragment.refreshList();
                                             MainActivity._favListFragment.refreshList();
+                                            // update apartments after fields update
+                                            ApartmentListFragment.reCalcApartmentList(fields);
+                                            Data.getDeletedApartments().clear();
                                             // set the new city
                                             Data.setCity(city);
                                             return true;
@@ -94,6 +95,9 @@ public class SettingsFragment extends Fragment {
 
                                     protected void onPostExecute(Boolean result) {
                                         if (result) {
+                                            // update map
+                                            MainActivity._mapFragment.positionMap();
+                                            MainActivity._mapFragment.refreshMap();
                                             Toast after = Toast.makeText(getContext(), "העיר עודכנה בהצלחה.", Toast.LENGTH_SHORT);
                                             after.show();
                                         } else {

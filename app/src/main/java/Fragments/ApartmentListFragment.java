@@ -52,8 +52,8 @@ public class ApartmentListFragment extends Fragment {
     public static ArrayList<Apartment> _apartments;
     public static ArrayList<Apartment> _apartmentsFavs;
     private CustomAdapter _adapter;
-    int _longClickedApartment;
-    String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Checklease";
+    private static int _longClickedApartment;
+    private String _pathFiles = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Checklease";
     private boolean _isFav;
 
     public ApartmentListFragment(boolean isFav){

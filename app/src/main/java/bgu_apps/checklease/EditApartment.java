@@ -196,7 +196,7 @@ public class EditApartment extends AppCompatActivity {
                     spinnerLabel.setText(field.getName());
                     // set spinner objects
                     String[] items = field.getEx1().split(";");
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_spinner_item, items);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.array_list_layout, items);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
                     spinner.setAdapter(adapter);
                     spinner.setSelection(param.getIntValue());

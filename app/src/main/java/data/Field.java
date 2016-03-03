@@ -94,7 +94,7 @@ public class Field {
                         break;
                 }
             }
-            else // field wasn't exist when apartmrnt was created or no apartment is given.
+            else // field wasn't exist when apartment was created or no apartment is given.
                 ans.add(new Value(currField.getEx1(), currField.getEx2()));
         }
         return ans;
